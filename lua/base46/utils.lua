@@ -4,16 +4,15 @@ M.on_move = function()
   local cursor_pos = vim.api.nvim_win_get_cursor(M.winnr)
   if cursor_pos[1] < 2 then
     cursor_pos[1] = cursor_pos[1] + 1
+    vim.api.nvim_win_set_cursor(M.winnr, cursor_pos)
   elseif cursor_pos[1] > M.endline then
     cursor_pos[1] = M.endline
-  else
-    local start = cursor_pos[1] - 1
-    local theme = vim.api.nvim_buf_get_lines(M.bufnr, start, start + 1, false)[1]
-    M.switch2theme(theme)
-    return
+    vim.api.nvim_win_set_cursor(M.winnr, cursor_pos)
   end
 
-  vim.api.nvim_win_set_cursor(M.winnr, cursor_pos)
+  local start = cursor_pos[1] - 1
+  local theme = vim.api.nvim_buf_get_lines(M.bufnr, start, start + 1, false)[1]
+  M.switch2theme(theme)
 end
 
 M.preview_themes = function()
@@ -48,7 +47,7 @@ M.preview_themes = function()
   })
   vim.api.nvim_create_autocmd({ "BufDelete", "BufWipeout" }, {
     buffer = bufnr,
-    callback = function(a)
+    callback = function(_)
       vim.api.nvim_del_autocmd(autocmd_id)
     end,
   })
@@ -56,7 +55,7 @@ M.preview_themes = function()
   local cfg = require("base46").cfg()
   local path = cfg.pkgpath .. "/lua/base46/themes"
   local line = 1
-  local current_theme = vim.g.current_theme
+  local current_theme = vim.g.base46_config.current_theme
   local cursor_pos = { 1, 1 }
 
   vim.api.nvim_buf_set_lines(bufnr, 0, 0, false, { "    themes preview" })
