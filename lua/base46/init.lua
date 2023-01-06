@@ -150,7 +150,7 @@ M.override_theme = function(default_theme, theme_name)
 end
 
 M.set_background = function(background)
-  if vim.g.base46_config.theme.background == background then
+  if vim.g.base46_config.cur_background == background then
     return
   end
 
@@ -159,8 +159,8 @@ M.set_background = function(background)
     return
   end
 
-  vim.g.base46_config.theme.background = background
-  local theme = M.theme[vim.g.base46_config.theme.background]
+  vim.g.base46_config = vim.tbl_deep_extend('force', vim.g.base46_config, {cur_background = background, })
+  local theme = vim.g.base46_config.theme[background]
   M.load_theme(theme)
 end
 
@@ -189,8 +189,10 @@ end
 M.setup = function(opts)
   local config = require("base46.config")
   vim.g.base46_config = vim.tbl_deep_extend('force', config, opts or {})
+  local background = vim.g.base46_config.theme.background
+  vim.g.base46_config = vim.tbl_deep_extend('force', vim.g.base46_config, {cur_background = background, })
 
-  local theme = vim.g.base46_config.theme[vim.g.base46_config.theme.background]
+  local theme = vim.g.base46_config.theme[vim.g.base46_config.cur_background]
   M.load_theme(theme)
 end
 
