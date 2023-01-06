@@ -190,10 +190,7 @@ M.setup = function(opts)
   local config = require("base46.config")
   vim.g.base46_config = vim.tbl_deep_extend('force', config, opts or {})
   local background = vim.g.base46_config.theme.background
-  vim.g.base46_config = vim.tbl_deep_extend('force', vim.g.base46_config, {cur_background = background, })
-
-  local theme = vim.g.base46_config.theme[vim.g.base46_config.cur_background]
-  M.load_theme(theme)
+  M.set_background(background)
 end
 
 return M

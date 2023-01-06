@@ -1,6 +1,7 @@
 return {
     cachepath = vim.fn.stdpath("data") .. "/colorscheme/",
     pkgpath = "",
+    cur_background = "",
 
     theme = {
       light = "one_light",
