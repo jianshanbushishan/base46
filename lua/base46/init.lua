@@ -1,20 +1,18 @@
 local M = {}
-local g = vim.g
-local config = require("core.utils").load_config()
+
+M.cfg = function()
+  return vim.g.base46_config
+end
 
 M.get_theme_tb = function(type)
-  local default_path = "base46.themes." .. g.nvchad_theme
-  local user_path = "custom.themes." .. g.nvchad_theme
+  local default_path = "base46.themes." .. vim.g.base46_config.current_theme
 
-  local present1, default_theme = pcall(require, default_path)
-  local present2, user_theme = pcall(require, user_path)
-
-  if present1 then
+  -- local present1, default_theme = pcall(require, default_path)
+  local default_theme = require(default_path)
+  if default_theme then
     return default_theme[type]
-  elseif present2 then
-    return user_theme[type]
   else
-    error "No such theme bruh >_< "
+    error("No such theme bruh >_< ")
   end
 end
 
@@ -22,25 +20,9 @@ M.merge_tb = function(table1, table2)
   return vim.tbl_deep_extend("force", table1, table2)
 end
 
-M.load_all_highlights = function()
-  vim.opt.bg = require("base46").get_theme_tb "type" -- dark/light
-
-  -- reload highlights for theme switcher
-  local reload = require("plenary.reload").reload_module
-
-  reload "base46.integrations"
-  reload "base46.chadlights"
-
-  local hl_groups = require "base46.chadlights"
-
-  for hl, col in pairs(hl_groups) do
-    vim.api.nvim_set_hl(0, hl, col)
-  end
-end
-
 M.turn_str_to_color = function(tb_in)
   local tb = vim.deepcopy(tb_in)
-  local colors = M.get_theme_tb "base_30"
+  local colors = M.get_theme_tb("base_30")
 
   for _, groups in pairs(tb) do
     for k, v in pairs(groups) do
@@ -57,8 +39,7 @@ M.turn_str_to_color = function(tb_in)
 end
 
 M.extend_default_hl = function(highlights)
-  local glassy = require "base46.glassy"
-  local polish_hl = M.get_theme_tb "polish_hl"
+  local polish_hl = M.get_theme_tb("polish_hl")
 
   -- polish themes
   if polish_hl then
@@ -69,44 +50,97 @@ M.extend_default_hl = function(highlights)
     end
   end
 
-  -- transparency
-  if vim.g.transparency then
-    for key, value in pairs(glassy) do
+  if vim.g.base46_config.highlight.hl_override then
+    local overriden_hl = M.turn_str_to_color(vim.g.base46_config.highlight.hl_override)
+
+    for key, value in pairs(overriden_hl) do
       if highlights[key] then
         highlights[key] = M.merge_tb(highlights[key], value)
       end
     end
   end
-
-  local overriden_hl = M.turn_str_to_color(config.ui.hl_override)
-
-  for key, value in pairs(overriden_hl) do
-    if highlights[key] then
-      highlights[key] = M.merge_tb(highlights[key], value)
-    end
-  end
 end
 
 M.load_highlight = function(group)
-  if type(group) == "string" then
-    group = require("base46.integrations." .. group)
-    M.extend_default_hl(group)
+  group = require("base46.integrations." .. group)
+  M.extend_default_hl(group)
+  return group
+end
+
+-- convert table into string
+M.table_to_str = function(tb)
+  local result = ""
+
+  for hlgroupName, hlgroup_vals in pairs(tb) do
+    local hlname = "'" .. hlgroupName .. "',"
+    local opts = ""
+
+    for optName, optVal in pairs(hlgroup_vals) do
+      local valueInStr = ((type(optVal)) == "boolean" or type(optVal) == "number")
+          and tostring(optVal)
+        or '"' .. optVal .. '"'
+      opts = opts .. optName .. "=" .. valueInStr .. ","
+    end
+
+    result = result .. "vim.api.nvim_set_hl(0," .. hlname .. "{" .. opts .. "})"
   end
 
-  for hl, col in pairs(group) do
-    vim.api.nvim_set_hl(0, hl, col)
+  return result
+end
+
+M.saveStr_to_cache = function(filename, tb)
+  -- Thanks to https://github.com/EdenEast/nightfox.nvim
+  -- It helped me understand string.dump stuff
+
+  local cachepath = vim.g.base46_config.cacheroot
+  local lines = 'require("base46").compiled = string.dump(function()'
+    .. M.table_to_str(tb)
+    .. "end)"
+  local file = io.open(cachepath .. filename, "wb")
+
+  loadstring(lines, "=")()
+
+  if file then
+    file:write(require("base46").compiled)
+    file:close()
   end
 end
 
-M.load_theme = function()
-  M.load_highlight "defaults"
-  M.load_highlight "statusline"
-  M.load_highlight "syntax"
-  M.load_highlight(M.turn_str_to_color(config.ui.hl_add))
+M.compile = function()
+  -- All integration modules, each file returns a table
+  local hl_files = vim.g.base46_config.pkgpath .. "/lua/base46/integrations"
+
+  for _, file in ipairs(vim.fn.readdir(hl_files)) do
+    local filename = vim.fn.fnamemodify(file, ":r")
+    local integration = M.load_highlight(filename)
+
+    -- merge new hl groups added by users
+    if filename == "defaults" then
+      integration = M.merge_tb(integration, (M.turn_str_to_color(vim.g.base46_config.highlight.hl_add)))
+    end
+
+    M.saveStr_to_cache(filename, integration)
+  end
+
+  local bg_file = io.open(vim.g.base46_config.cacheroot .. "bg", "wb")
+
+  if bg_file then
+    bg_file:write("vim.opt.bg='" .. M.get_theme_tb("type") .. "'")
+    bg_file:close()
+  end
+end
+
+M.load_all_highlights = function()
+  require("plenary.reload").reload_module("base46")
+  M.compile()
+
+  for _, file in ipairs(vim.fn.readdir(vim.g.base46_config.cacheroot)) do
+    M.set_highlight(file)
+  end
 end
 
 M.override_theme = function(default_theme, theme_name)
-  local changed_themes = config.ui.changed_themes
+  local changed_themes = vim.g.base46_config.changed_themes
 
   if changed_themes[theme_name] then
     return M.merge_tb(default_theme, changed_themes[theme_name])
@@ -115,55 +149,49 @@ M.override_theme = function(default_theme, theme_name)
   end
 end
 
-M.toggle_theme = function()
-  local themes = config.ui.theme_toggle
-
-  local theme1 = themes[1]
-  local theme2 = themes[2]
-
-  if g.nvchad_theme == theme1 or g.nvchad_theme == theme2 then
-    if g.toggle_theme_icon == "   " then
-      g.toggle_theme_icon = "   "
-    else
-      g.toggle_theme_icon = "   "
-    end
+M.set_background = function(background)
+  if vim.g.base46_config.theme.background == background then
+    return
   end
 
-  if g.nvchad_theme == theme1 then
-    g.nvchad_theme = theme2
+  if background ~= "light" and background ~= "dark" then
+    error("Invalid background val: " .. background)
+    return
+  end
 
-    require("nvchad").reload_theme()
-    require("nvchad").change_theme(theme1, theme2)
-  elseif g.nvchad_theme == theme2 then
-    g.nvchad_theme = theme1
+  vim.g.base46_config.theme.background = background
+  local theme = M.theme[vim.g.base46_config.theme.background]
+  M.load_theme(theme)
+end
 
-    require("nvchad").reload_theme()
-    require("nvchad").change_theme(theme2, theme1)
+M.load_theme = function(theme)
+  local root = vim.g.base46_config.cachepath .. "/" .. theme .. "/"
+  vim.g.base46_config = vim.tbl_deep_extend('force', vim.g.base46_config, {current_theme = theme, cacheroot = root})
+
+  local f = io.open(root .. "bg", "r")
+  if f == nil then
+    vim.fn.mkdir(root, "p")
+    require("base46").load_all_highlights()
   else
-    vim.notify "Set your current theme to one of those mentioned in the theme_toggle table (chadrc)"
+    io.close(f)
+    M.set_highlight("defaults")
+    M.set_highlight("statusline")
+    for _, plugin in ipairs(vim.g.base46_config.integrations) do
+      M.set_highlight(plugin)
+    end
   end
 end
 
-M.toggle_transparency = function()
-  local transparency_status = config.ui.transparency
-  local write_data = require("nvchad").write_data
+M.set_highlight = function(plugin)
+  loadfile(vim.g.base46_config.cacheroot .. plugin)()
+end
 
-  local function save_chadrc_data()
-    local old_data = "transparency = " .. tostring(transparency_status)
-    local new_data = "transparency = " .. tostring(g.transparency)
+M.setup = function(opts)
+  local config = require("base46.config")
+  vim.g.base46_config = vim.tbl_deep_extend('force', config, opts or {})
 
-    write_data(old_data, new_data)
-  end
-
-  if g.transparency then
-    g.transparency = false
-    M.load_all_highlights()
-    save_chadrc_data()
-  else
-    g.transparency = true
-    M.load_all_highlights()
-    save_chadrc_data()
-  end
+  local theme = vim.g.base46_config.theme[vim.g.base46_config.theme.background]
+  M.load_theme(theme)
 end
 
 return M

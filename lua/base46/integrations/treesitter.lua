@@ -1,4 +1,4 @@
-local theme = require("base46").get_theme_tb "base_16"
+local theme = require("base46").get_theme_tb("base_16")
 
 return {
   -- `@annotation` is not one of the default capture group, should we keep it
@@ -60,6 +60,10 @@ return {
 
   ["@function.macro"] = {
     fg = theme.base08,
+  },
+
+  ["@function.call"] = {
+    fg = theme.base0D,
   },
 
   ["@keyword.operator"] = {
@@ -179,10 +183,10 @@ return {
   ["@field"] = {
     fg = theme.base08,
   },
-  --
-  -- ["@field.key"] = {
-  --   fg = theme.base0D,
-  -- },
+
+  ["@field.key"] = {
+    fg = theme.base08,
+  },
 
   ["@property"] = {
     fg = theme.base08,

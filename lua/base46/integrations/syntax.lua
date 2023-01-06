@@ -1,6 +1,4 @@
-local theme = require("base46").get_theme_tb "base_16"
-
--- Standard syntax highlighting
+local theme = require("base46").get_theme_tb("base_16")
 
 return {
   Boolean = {
