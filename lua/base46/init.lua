@@ -76,8 +76,7 @@ M.table_to_str = function(tb)
     local opts = ""
 
     for optName, optVal in pairs(hlgroup_vals) do
-      local valueInStr = ((type(optVal)) == "boolean" or type(optVal) == "number")
-          and tostring(optVal)
+      local valueInStr = ((type(optVal)) == "boolean" or type(optVal) == "number") and tostring(optVal)
         or '"' .. optVal .. '"'
       opts = opts .. optName .. "=" .. valueInStr .. ","
     end
@@ -93,9 +92,7 @@ M.saveStr_to_cache = function(filename, tb)
   -- It helped me understand string.dump stuff
 
   local cachepath = vim.g.base46_config.cacheroot
-  local lines = 'require("base46").compiled = string.dump(function()'
-    .. M.table_to_str(tb)
-    .. "end)"
+  local lines = 'require("base46").compiled = string.dump(function()' .. M.table_to_str(tb) .. "end)"
   local file = io.open(cachepath .. filename, "wb")
 
   loadstring(lines, "=")()
@@ -156,29 +153,47 @@ M.set_background = function(background)
 
   if background ~= "light" and background ~= "dark" then
     error("Invalid background val: " .. background)
-    return
+    background = "light"
   end
 
-  vim.g.base46_config = vim.tbl_deep_extend('force', vim.g.base46_config, {cur_background = background, })
+  vim.g.base46_config = vim.tbl_deep_extend("force", vim.g.base46_config, { cur_background = background })
   local theme = vim.g.base46_config.theme[background]
   M.load_theme(theme)
 end
 
 M.load_theme = function(theme)
+  if theme == nil then
+    local valid = require("base46.utils").get_valid_theme()
+    if valid == "" then
+      error("ERR: no themes installed.")
+      return
+    else
+      print("invalid theme: " .. theme .. ", set theme to " .. valid)
+      theme = valid
+    end
+  end
+
   local root = vim.g.base46_config.cachepath .. "/" .. theme .. "/"
-  vim.g.base46_config = vim.tbl_deep_extend('force', vim.g.base46_config, {current_theme = theme, cacheroot = root})
+  vim.g.base46_config = vim.tbl_deep_extend("force", vim.g.base46_config, { current_theme = theme, cacheroot = root })
 
   local f = io.open(root .. "bg", "r")
   if f == nil then
     vim.fn.mkdir(root, "p")
     require("base46").load_all_highlights()
   else
+    local content = f:read("*l")
+    local background = content:gmatch("'(.*)'")()
+    if background ~= "light" and background ~= "dark" then
+      error("Invalid background val: " .. background .. " with theme: " .. theme)
+      background = "light"
+    end
     io.close(f)
     M.set_highlight("defaults")
     M.set_highlight("statusline")
     for _, plugin in ipairs(vim.g.base46_config.integrations) do
       M.set_highlight(plugin)
     end
+    vim.g.base46_config = vim.tbl_deep_extend("force", vim.g.base46_config, { cur_background = background })
   end
 end
 
@@ -188,7 +203,7 @@ end
 
 M.setup = function(opts)
   local config = require("base46.config")
-  vim.g.base46_config = vim.tbl_deep_extend('force', config, opts or {})
+  vim.g.base46_config = vim.tbl_deep_extend("force", config, opts or {})
   local background = vim.g.base46_config.theme.background
   M.set_background(background)
 end

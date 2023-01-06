@@ -57,7 +57,7 @@ M.preview_themes = function()
   local path = cfg.pkgpath .. "/lua/base46/themes"
   local line = 1
   local current_theme = vim.g.current_theme
-  local cursor_pos = {1,1}
+  local cursor_pos = { 1, 1 }
 
   vim.api.nvim_buf_set_lines(bufnr, 0, 0, false, { "    themes preview" })
   for _, file in ipairs(vim.fn.readdir(path)) do
@@ -79,6 +79,25 @@ M.switch2theme = function(theme)
     return
   end
   require("base46").load_theme(theme)
+end
+
+M.switch_background = function()
+  local background = "light"
+  if vim.g.base46_config.cur_background == "light" then
+    background = "dark"
+  end
+  require("base46").set_background(background)
+end
+
+M.get_valid_theme = function()
+  local themes = vim.g.base46_config.pkgpath .. "/lua/base46/themes"
+
+  for _, file in ipairs(vim.fn.readdir(themes)) do
+    local filename = vim.fn.fnamemodify(file, ":r")
+    return filename
+  end
+
+  return ""
 end
 
 return M
