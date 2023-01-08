@@ -4,7 +4,7 @@ M.get_valid_theme = function()
   local themes = vim.api.nvim_get_runtime_file("lua/base46/themes/*.lua", true)
 
   for _, file in ipairs(themes) do
-    local filename = vim.fn.fnamemodify(file, ":r")
+    local filename = vim.fn.fnamemodify(file, ":t:r")
     return filename
   end
 
