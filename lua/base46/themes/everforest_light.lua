@@ -69,6 +69,6 @@ M.polish_hl = {
 
 M.type = "light"
 
-M = require("base46").override_theme(M, "everforest_light")
+M = require("base46.utils").override_theme(M, "everforest_light")
 
 return M

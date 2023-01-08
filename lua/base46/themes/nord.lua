@@ -58,6 +58,6 @@ M.polish_hl = {
 }
 M.type = "dark"
 
-M = require("base46").override_theme(M, "nord")
+M = require("base46.utils").override_theme(M, "nord")
 
 return M

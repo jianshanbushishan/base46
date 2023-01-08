@@ -54,6 +54,6 @@ M.base_16 = {
 
 M.type = "dark"
 
-M = require("base46").override_theme(M, "gruvbox")
+M = require("base46.utils").override_theme(M, "gruvbox")
 
 return M

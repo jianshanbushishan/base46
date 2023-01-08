@@ -1,6 +1,8 @@
-return {
+local M = {}
+
+M.default = {
   cachepath = vim.fn.stdpath("data") .. "/colorscheme/",
-  pkgpath = "",
+  themecfg = vim.fn.stdpath("data") .. "/theme.conf",
   cur_background = "",
 
   theme = {
@@ -33,3 +35,18 @@ return {
     "blankline",
   },
 }
+
+M.get = function()
+  return vim.g.base46_config
+end
+
+M.update = function(opts)
+  vim.g.base46_config = vim.tbl_deep_extend("force", vim.g.base46_config, opts)
+end
+
+M.init = function(opts)
+  vim.g.base46_config = vim.tbl_deep_extend("force", M.default, opts or {})
+  return vim.g.base46_config
+end
+
+return M

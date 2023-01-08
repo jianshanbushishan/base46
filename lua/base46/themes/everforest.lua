@@ -59,6 +59,6 @@ M.polish_hl = {
   ["@tag.delimiter"] = { fg = M.base_30.green },
 }
 
-M = require("base46").override_theme(M, "everforest")
+M = require("base46.utils").override_theme(M, "everforest")
 
 return M

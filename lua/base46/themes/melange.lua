@@ -79,6 +79,6 @@ M.polish_hl = {
   },
 }
 
-M = require("base46").override_theme(M, "melange")
+M = require("base46.utils").override_theme(M, "melange")
 
 return M

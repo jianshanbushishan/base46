@@ -59,6 +59,6 @@ M.polish_hl = {
 
 M.type = "dark"
 
-M = require("base46").override_theme(M, "monekai")
+M = require("base46.utils").override_theme(M, "monekai")
 
 return M

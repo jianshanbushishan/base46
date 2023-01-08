@@ -67,6 +67,6 @@ M.polish_hl = {
 
 M.type = "dark"
 
-M = require("base46").override_theme(M, "oceanic-next")
+M = require("base46.utils").override_theme(M, "oceanic-next")
 
 return M
