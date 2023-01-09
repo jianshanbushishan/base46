@@ -59,7 +59,7 @@ M.load_conf = function(f)
   local content = f:read("*a")
   local opts = vim.json.decode(content)
   io.close(f)
-  require("base46.config").update({theme = opts,})
+  require("base46.config").update({ theme = opts })
 end
 
 M.setup = function(opts)
@@ -68,9 +68,11 @@ M.setup = function(opts)
   if f ~= nil then
     M.load_conf(f)
   else
-    local f = io.open(config.themecfg, "w")
-    f:write(vim.json.encode(config.theme))
-    io.close(f)
+    f = io.open(config.themecfg, "w")
+    if f ~= nil then
+      f:write(vim.json.encode(config.theme))
+      io.close(f)
+    end
   end
 
   if opts.autoswitch then
@@ -81,10 +83,10 @@ M.setup = function(opts)
         if not defer then -- only set once in window
           defer = vim.defer_fn(function()
             defer = nil
-            local f = io.open(config.themecfg, "r")
-            if f ~= nil then
-              M.load_conf(f)
-              config = require("base46.config").get() 
+            local fc = io.open(config.themecfg, "r")
+            if fc ~= nil then
+              M.load_conf(fc)
+              config = require("base46.config").get()
               M.set_background(config.theme.background)
             end
           end, 100)
@@ -93,7 +95,7 @@ M.setup = function(opts)
     })
   end
 
-  config = require("base46.config").get() 
+  config = require("base46.config").get()
   M.set_background(config.theme.background)
 end
 
@@ -104,6 +106,11 @@ M.switch_background = function()
     background = "dark"
   end
   require("base46").set_background(background)
+end
+
+M.preview = function()
+  local preview = require("base46.preview")
+  preview.open_themes_list()
 end
 
 return M

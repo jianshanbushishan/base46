@@ -1,26 +1,26 @@
 local M = {}
 
 M.get_select = function()
-    local cursor_pos = vim.api.nvim_win_get_cursor(M.winnr)
-    if cursor_pos[1] < 2 then
-      cursor_pos[1] = cursor_pos[1] + 1
-      vim.api.nvim_win_set_cursor(M.winnr, cursor_pos)
-    elseif cursor_pos[1] > M.endline then
-      cursor_pos[1] = M.endline
-      vim.api.nvim_win_set_cursor(M.winnr, cursor_pos)
-    end
-  
-    local start = cursor_pos[1] - 1
-    local theme = vim.api.nvim_buf_get_lines(M.bufnr, start, start + 1, false)[1]
-    return theme
+  local cursor_pos = vim.api.nvim_win_get_cursor(M.winnr)
+  if cursor_pos[1] < 2 then
+    cursor_pos[1] = cursor_pos[1] + 1
+    vim.api.nvim_win_set_cursor(M.winnr, cursor_pos)
+  elseif cursor_pos[1] > M.endline then
+    cursor_pos[1] = M.endline
+    vim.api.nvim_win_set_cursor(M.winnr, cursor_pos)
+  end
+
+  local start = cursor_pos[1] - 1
+  local theme = vim.api.nvim_buf_get_lines(M.bufnr, start, start + 1, false)[1]
+  return theme
 end
 
 M.on_move = function()
-    local theme = M.get_select()
+  local theme = M.get_select()
   M.switch2theme(theme)
 end
 
-M.preview_themes = function()
+M.open_themes_list = function()
   vim.cmd("vnew")
 
   vim.wo.foldenable = false
@@ -86,12 +86,14 @@ M.switch2theme = function(theme)
 end
 
 M.save_conf = function()
-    local config = require("base46.config").get()
-    local f = io.open(config.themecfg, "w")
-    local conf = {background = config.cur_background, [config.cur_background]=config.current_theme}
-    conf =  require("base46.utils").merge_tb(config.theme, conf)
+  local config = require("base46.config").get()
+  local f = io.open(config.themecfg, "w")
+  if f ~= nil then
+    local conf = { background = config.cur_background, [config.cur_background] = config.current_theme }
+    conf = require("base46.utils").merge_tb(config.theme, conf)
     f:write(vim.json.encode(conf))
     io.close(f)
+  end
 end
 
 return M
