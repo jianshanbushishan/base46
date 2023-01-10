@@ -1,5 +1,6 @@
 local M = {}
 
+local error = vim.log.levels.ERROR
 M.set_background = function(background)
   local config = require("base46.config").get()
   if config.cur_background == background then
@@ -7,7 +8,8 @@ M.set_background = function(background)
   end
 
   if background ~= "light" and background ~= "dark" then
-    error("Invalid background val: " .. background)
+    local msg = "Invalid background val: " .. background
+    vim.notify(msg, error, { title = "Base46.nvim" })
     background = "light"
   end
 
@@ -20,7 +22,8 @@ M.load_theme = function(theme)
   if theme == nil then
     local valid = require("base46.utils").get_valid_theme()
     if valid == "" then
-      error("ERR: no themes installed.")
+      local msg = "ERR: no themes installed."
+      vim.notify(msg, error, { title = "Base46.nvim" })
       return
     else
       print("invalid theme: " .. theme .. ", set theme to " .. valid)
@@ -41,7 +44,8 @@ M.load_theme = function(theme)
     local content = f:read("*l")
     local background = content:gmatch("'(.*)'")()
     if background ~= "light" and background ~= "dark" then
-      error("Invalid background val: " .. background .. " with theme: " .. theme)
+      local msg = "Invalid background val: " .. background .. " with theme: " .. theme
+      vim.notify(msg, error, { title = "Base46.nvim" })
       background = "light"
     end
     io.close(f)
@@ -76,23 +80,28 @@ M.setup = function(opts)
   end
 
   if opts.autoswitch then
-    local fwatch = require("fwatch")
-    local defer = nil
-    fwatch.watch(config.themecfg, {
-      on_event = function()
-        if not defer then -- only set once in window
-          defer = vim.defer_fn(function()
-            defer = nil
-            local fc = io.open(config.themecfg, "r")
-            if fc ~= nil then
-              M.load_conf(fc)
-              config = require("base46.config").get()
-              M.set_background(config.theme.background)
-            end
-          end, 100)
-        end
-      end,
-    })
+    local present, fwatch = pcall(require, "fwatch")
+    if not present then
+      local msg = "this feature depend on fwatch, install it first."
+      vim.notify(msg, error, { title = "base46.nvim" })
+    else
+      local defer = nil
+      fwatch.watch(config.themecfg, {
+        on_event = function()
+          if not defer then -- only set once in window
+            defer = vim.defer_fn(function()
+              defer = nil
+              local fc = io.open(config.themecfg, "r")
+              if fc ~= nil then
+                M.load_conf(fc)
+                config = require("base46.config").get()
+                M.set_background(config.theme.background)
+              end
+            end, 100)
+          end
+        end,
+      })
+    end
   end
 
   config = require("base46.config").get()

@@ -20,7 +20,7 @@ M.get_theme_tb = function(type)
   if default_theme then
     return default_theme[type]
   else
-    error("No such theme bruh >_< ")
+    vim.notify("No such theme bruh >_< ", vim.log.levels.ERROR, { title = "Base46.nvim" })
   end
 end
 
