@@ -97,7 +97,10 @@ local generate_color = require("base46.colors").change_hex_lightness
 if cmp_ui.style == "atom" then
   for key, value in pairs(item_kinds) do
     item_kinds[key] = vim.tbl_deep_extend("force", value, {
-      bg = vim.o.bg == "dark" and generate_color(colors.black2, 6) or generate_color(colors.black2, -6),
+      bg = vim.o.bg == "dark" and generate_color(colors.black2, 6) or generate_color(
+        colors.black2,
+        -6
+      ),
     })
   end
 end

@@ -269,7 +269,11 @@ local function genModes_hl(modename, col)
   M.default["St_" .. modename .. "Mode"] = { fg = colors.black, bg = colors[col], bold = true }
   M.default["St_" .. modename .. "ModeSep"] = { fg = colors[col], bg = colors.grey }
 
-  M.vscode_colored["St_" .. modename .. "Mode"] = { fg = colors[col], bg = colors.one_bg3, bold = true }
+  M.vscode_colored["St_" .. modename .. "Mode"] = {
+    fg = colors[col],
+    bg = colors.one_bg3,
+    bold = true,
+  }
 
   M.minimal["St_" .. modename .. "Mode"] = { fg = colors.black, bg = colors[col], bold = true }
   M.minimal["St_" .. modename .. "ModeSep"] = { fg = colors[col], bg = colors.black, bold = true }
