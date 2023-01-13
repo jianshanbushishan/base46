@@ -63,16 +63,22 @@ M.open_themes_list = function()
   local cursor_pos = { 1, 1 }
 
   vim.api.nvim_buf_set_lines(bufnr, 0, 0, false, { "    themes preview" })
+  local theme_pos = {}
   for _, file in ipairs(themes) do
     local theme = vim.fn.fnamemodify(file, ":t:r")
     if theme == config.current_theme then
       cursor_pos = { line + 1, 0 }
     end
+    theme_pos[theme] = line
     vim.api.nvim_buf_set_lines(bufnr, line, line, false, { theme })
     line = line + 1
   end
 
   M.endline = line
+  local utils = require("base46.utils")
+  M.namespace = vim.api.nvim_create_namespace("base46_preview")
+  utils.create_highlight_for_preview(M.namespace, bufnr, theme_pos)
+
   vim.api.nvim_win_set_cursor(winnr, cursor_pos)
   vim.bo.modifiable = false
 end

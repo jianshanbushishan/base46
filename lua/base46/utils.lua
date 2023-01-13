@@ -96,7 +96,7 @@ M.table_to_str = function(tb)
   return result
 end
 
-M.saveStr_to_cache = function(filename, tb)
+M.save_to_cache = function(filename, tb)
   -- Thanks to https://github.com/EdenEast/nightfox.nvim
   -- It helped me understand string.dump stuff
 
@@ -127,7 +127,7 @@ M.compile = function()
       integration = M.merge_tb(integration, (M.turn_str_to_color(config.highlight.hl_add)))
     end
 
-    M.saveStr_to_cache(filename, integration)
+    M.save_to_cache(filename, integration)
   end
 
   local bg_file = io.open(config.cacheroot .. "bg", "wb")
@@ -135,6 +135,47 @@ M.compile = function()
   if bg_file then
     bg_file:write("vim.opt.bg='" .. M.get_theme_tb("type") .. "'")
     bg_file:close()
+  end
+end
+
+M.create_highlight_for_preview = function(namespace, bufnr, pos)
+  local config = require("base46.config").get()
+  local f = io.open(config.cachepath .. "colors.json", "r")
+  if f == nil then
+    return
+  end
+
+  local content = f:read("*a")
+  f:close()
+
+  local colors = vim.json.decode(content)
+  local count = 1
+  for theme, color in pairs(colors) do
+    local hl_name = "HL_Preview%d"
+    hl_name = hl_name:format(count)
+    local hl_def = "hi def %s guifg=%s guibg=%s"
+    vim.api.nvim_command(hl_def:format(hl_name, color.fg, color.bg))
+    vim.api.nvim_buf_add_highlight(bufnr, namespace, hl_name, pos[theme], 0, 25)
+    count = count + 1
+  end
+end
+
+M.export_colors = function()
+  local themes = vim.api.nvim_get_runtime_file("lua/base46/themes/*.lua", true)
+
+  local colors = {}
+  for _, file in ipairs(themes) do
+    local theme = vim.fn.fnamemodify(file, ":t:r")
+    local color = require("base46.themes."..theme).base_16
+    colors[theme] = {bg = color.base00, fg = color.base05}
+  end
+
+  local config = require("base46.config").get()
+  local content = vim.json.encode(colors)
+  local f = io.open(config.cachepath .. "colors.json", "w")
+  if f then
+    f:write(content)
+    f:close()
   end
 end
 
