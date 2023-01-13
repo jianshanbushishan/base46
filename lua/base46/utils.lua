@@ -140,15 +140,22 @@ end
 
 M.create_highlight_for_preview = function(namespace, bufnr, pos)
   local config = require("base46.config").get()
-  local f = io.open(config.cachepath .. "colors.json", "r")
-  if f == nil then
-    return
+  local filepath = config.cachepath .. "colors.json"
+  local colors = {}
+  if vim.fn.filereadable(filepath) then
+    colors = M.export_colors()
+  else
+    local f = io.open(filepath, "r")
+    if f == nil then
+      return
+    end
+
+    local content = f:read("*a")
+    f:close()
+
+    colors = vim.json.decode(content)
   end
 
-  local content = f:read("*a")
-  f:close()
-
-  local colors = vim.json.decode(content)
   local count = 1
   for theme, color in pairs(colors) do
     local hl_name = "HL_Preview%d"
@@ -166,8 +173,8 @@ M.export_colors = function()
   local colors = {}
   for _, file in ipairs(themes) do
     local theme = vim.fn.fnamemodify(file, ":t:r")
-    local color = require("base46.themes."..theme).base_16
-    colors[theme] = {bg = color.base00, fg = color.base05}
+    local color = require("base46.themes." .. theme).base_16
+    colors[theme] = { bg = color.base00, fg = color.base05 }
   end
 
   local config = require("base46.config").get()
@@ -177,6 +184,8 @@ M.export_colors = function()
     f:write(content)
     f:close()
   end
+
+  return colors
 end
 
 M.load_all_highlights = function()
