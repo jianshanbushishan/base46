@@ -20,6 +20,11 @@ M.on_move = function()
   M.switch2theme(theme)
 end
 
+M.close = function()
+  vim.api.nvim_buf_clear_namespace(M.bufnr, M.namespace, 0, -1)
+  vim.api.nvim_win_close(M.winnr, true)
+end
+
 M.open_themes_list = function()
   vim.cmd("vnew")
 
@@ -37,24 +42,16 @@ M.open_themes_list = function()
   M.winnr = winnr
 
   local map_opts = { noremap = true, silent = true }
-  local bufname = "ThemePreview"
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "q", "<cmd>q!<cr><esc>", map_opts)
+  vim.api.nvim_buf_set_keymap(bufnr, "n", "q", "<cmd>lua require('base46.preview').close()<cr><esc>", map_opts)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<cr>", "<cmd>lua require('base46.preview').save_conf()<cr><esc>", map_opts)
 
   vim.api.nvim_win_set_width(winnr, 30)
-  vim.api.nvim_buf_set_name(bufnr, bufname)
 
-  local autocmd_id = vim.api.nvim_create_autocmd("CursorMoved", {
-    pattern = bufname,
+  vim.api.nvim_create_autocmd("CursorMoved", {
     callback = function()
       M.on_move()
     end,
-  })
-  vim.api.nvim_create_autocmd({ "BufDelete", "BufWipeout" }, {
     buffer = bufnr,
-    callback = function(_)
-      vim.api.nvim_del_autocmd(autocmd_id)
-    end,
   })
 
   local config = require("base46.config").get()
@@ -62,7 +59,7 @@ M.open_themes_list = function()
   local line = 1
   local cursor_pos = { 1, 1 }
 
-  vim.api.nvim_buf_set_lines(bufnr, 0, 0, false, { "    themes preview" })
+  vim.api.nvim_buf_set_lines(bufnr, 0, 0, false, { "Base46 Themes Preview" })
   local theme_pos = {}
   for _, file in ipairs(themes) do
     local theme = vim.fn.fnamemodify(file, ":t:r")
@@ -78,6 +75,8 @@ M.open_themes_list = function()
   local utils = require("base46.utils")
   M.namespace = vim.api.nvim_create_namespace("base46_preview")
   utils.create_highlight_for_preview(M.namespace, bufnr, theme_pos)
+  vim.api.nvim_set_hl(0, "PreviewCursorLine", { underline = true, italic = true })
+  vim.wo.winhl = "CursorLine:PreviewCursorLine"
 
   vim.api.nvim_win_set_cursor(winnr, cursor_pos)
   vim.bo.modifiable = false

@@ -11,6 +11,8 @@ M.default = {
     background = "light",
   },
 
+  ft = {},
+
   highlight = {
     hl_add = {},
     hl_override = {},

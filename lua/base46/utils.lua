@@ -142,7 +142,7 @@ M.create_highlight_for_preview = function(namespace, bufnr, pos)
   local config = require("base46.config").get()
   local filepath = config.cachepath .. "colors.json"
   local colors = {}
-  if vim.fn.filereadable(filepath) then
+  if not vim.fn.filereadable(filepath) then
     colors = M.export_colors()
   else
     local f = io.open(filepath, "r")
@@ -156,14 +156,12 @@ M.create_highlight_for_preview = function(namespace, bufnr, pos)
     colors = vim.json.decode(content)
   end
 
-  local count = 1
   for theme, color in pairs(colors) do
-    local hl_name = "HL_Preview%d"
-    hl_name = hl_name:format(count)
-    local hl_def = "hi def %s guifg=%s guibg=%s"
-    vim.api.nvim_command(hl_def:format(hl_name, color.fg, color.bg))
+    local hl_name = "Preview_%s"
+    hl_name = hl_name:format(theme:gsub("-", "_"))
+    -- local hl_def = "hi def %s guifg=%s guibg=%s"
+    vim.api.nvim_set_hl(0, hl_name, { fg = color.fg, bg = color.bg })
     vim.api.nvim_buf_add_highlight(bufnr, namespace, hl_name, pos[theme], 0, 25)
-    count = count + 1
   end
 end
 

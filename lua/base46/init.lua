@@ -14,7 +14,7 @@ M.set_background = function(background)
   end
 
   require("base46.config").update({ cur_background = background })
-  local theme = config.theme[background]
+  local theme = M.get_theme_by_filetype()
   M.load_theme(theme)
 end
 
@@ -104,8 +104,31 @@ M.setup = function(opts)
     end
   end
 
+  vim.api.nvim_create_autocmd("BufWinEnter", {
+    callback = function()
+      if vim.bo.filetype ~= "preview" then
+        local theme = M.get_theme_by_filetype()
+        M.load_theme(theme)
+      end
+    end,
+  })
+
   config = require("base46.config").get()
   M.set_background(config.theme.background)
+end
+
+M.get_theme_by_filetype = function()
+  local filetype = vim.bo.filetype
+  local config = require("base46.config").get()
+  local background = config.cur_background
+  if vim.tbl_get(config.ft, filetype) then
+    local conf = config.ft[filetype]
+    if vim.tbl_get(conf, background) then
+      return conf[background]
+    end
+  end
+
+  return config.theme[background]
 end
 
 M.switch_background = function()
