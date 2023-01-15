@@ -157,12 +157,16 @@ M.create_highlight_for_preview = function(namespace, bufnr, pos)
   end
 
   for theme, color in pairs(colors) do
-    local hl_name = "Preview_%s"
-    hl_name = hl_name:format(theme:gsub("-", "_"))
-    -- local hl_def = "hi def %s guifg=%s guibg=%s"
+    local hl_name = M.get_hl_name(theme)
     vim.api.nvim_set_hl(0, hl_name, { fg = color.fg, bg = color.bg })
-    vim.api.nvim_buf_add_highlight(bufnr, namespace, hl_name, pos[theme], 0, 25)
+    vim.api.nvim_buf_add_highlight(bufnr, namespace, hl_name, pos[theme], 0, -1)
   end
+end
+
+M.get_hl_name = function(theme)
+  local hl_name = "Preview_%s"
+  hl_name = hl_name:format(theme:gsub("-", "_"))
+  return hl_name
 end
 
 M.export_colors = function()
