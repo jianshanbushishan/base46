@@ -118,8 +118,13 @@ M.setup = function(opts)
 end
 
 M.get_theme_by_filetype = function()
-  local filetype = vim.bo.filetype
   local config = require("base46.config").get()
+  local name = vim.api.nvim_buf_get_name(0)
+  if name == "" and config.current_theme then
+    return config.current_theme
+  end
+
+  local filetype = vim.bo.filetype
   local background = config.cur_background
   if vim.tbl_get(config.ft, filetype) then
     local conf = config.ft[filetype]
