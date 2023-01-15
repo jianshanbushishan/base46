@@ -30,7 +30,7 @@ M.on_move = function()
       M.bufnr,
       M.namespace,
       line,
-      { { tostring("<---"), "Error" } },
+      { { tostring("<-------"), "Error" } },
       {}
   )
 
@@ -54,6 +54,7 @@ M.open_themes_list = function()
   vim.opt.number = false
   vim.opt.cursorline = true
   vim.opt.winfixwidth = true
+  vim.o.guicursor = "n:hor2"
 
   local bufnr = vim.api.nvim_get_current_buf()
   local winnr = vim.api.nvim_get_current_win()
@@ -76,6 +77,20 @@ M.open_themes_list = function()
       M.on_move()
     end,
     buffer = bufnr,
+  })
+  
+    vim.api.nvim_create_autocmd("BufEnter", {
+    callback = function()
+        vim.o.guicursor = "n:hor2"
+    end,
+     buffer = bufnr,
+  })
+  
+    vim.api.nvim_create_autocmd("BufLeave", {
+    callback = function()
+        vim.o.guicursor = "n:block"
+    end,
+     buffer = bufnr,
   })
 
   local config = require("base46.config").get()
