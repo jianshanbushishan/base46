@@ -85,7 +85,8 @@ M.table_to_str = function(tb)
     local opts = ""
 
     for optName, optVal in pairs(hlgroup_vals) do
-      local valueInStr = ((type(optVal)) == "boolean" or type(optVal) == "number") and tostring(optVal)
+      local valueInStr = ((type(optVal)) == "boolean" or type(optVal) == "number")
+          and tostring(optVal)
         or '"' .. optVal .. '"'
       opts = opts .. optName .. "=" .. valueInStr .. ","
     end
@@ -102,7 +103,9 @@ M.save_to_cache = function(filename, tb)
 
   local config = require("base46.config").get()
 
-  local lines = 'require("base46").compiled = string.dump(function()' .. M.table_to_str(tb) .. "end)"
+  local lines = 'require("base46").compiled = string.dump(function()'
+    .. M.table_to_str(tb)
+    .. "end)"
   local file = io.open(config.cacheroot .. filename, "wb")
 
   loadstring(lines, "=")()
@@ -124,7 +127,10 @@ M.compile = function()
 
     -- merge new hl groups added by users
     if filename == "defaults" then
-      integration = M.merge_tb(integration, (M.turn_str_to_color(config.highlight.hl_add)))
+      integration = M.merge_tb(
+        integration,
+        (M.turn_str_to_color(config.highlight.hl_add))
+      )
     end
 
     M.save_to_cache(filename, integration)

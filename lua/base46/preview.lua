@@ -18,20 +18,21 @@ end
 
 M.on_move = function()
   if M.lastline ~= -1 then
-    local theme = vim.api.nvim_buf_get_lines(M.bufnr, M.lastline, M.lastline + 1, false)[1]
+    local theme =
+      vim.api.nvim_buf_get_lines(M.bufnr, M.lastline, M.lastline + 1, false)[1]
     local hl_name = require("base46.utils").get_hl_name(theme)
-    vim.api.nvim_buf_clear_namespace(M.bufnr, M.namespace, M.lastline, M.lastline+1)
+    vim.api.nvim_buf_clear_namespace(M.bufnr, M.namespace, M.lastline, M.lastline + 1)
     vim.api.nvim_buf_add_highlight(M.bufnr, M.namespace, hl_name, M.lastline, 0, -1)
   end
 
   local line = M.get_select()
   local cursor_pos = vim.api.nvim_win_get_cursor(M.winnr)
   vim.api.nvim_buf_set_virtual_text(
-      M.bufnr,
-      M.namespace,
-      line,
-      { { tostring("<-------"), "Error" } },
-      {}
+    M.bufnr,
+    M.namespace,
+    line,
+    { { tostring("<-------"), "Error" } },
+    {}
   )
 
   M.lastline = line
@@ -62,13 +63,25 @@ M.open_themes_list = function()
   M.winnr = winnr
 
   local map_opts = { noremap = true, silent = true }
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "q", "<cmd>lua require('base46.preview').close()<cr><esc>", map_opts)
+  vim.api.nvim_buf_set_keymap(
+    bufnr,
+    "n",
+    "q",
+    "<cmd>lua require('base46.preview').close()<cr><esc>",
+    map_opts
+  )
   vim.api.nvim_buf_set_keymap(bufnr, "n", "l", "", map_opts)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "h", "", map_opts)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "v", "", map_opts)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "V", "", map_opts)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "r", "", map_opts)
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<cr>", "<cmd>lua require('base46.preview').save_conf()<cr><esc>", map_opts)
+  vim.api.nvim_buf_set_keymap(
+    bufnr,
+    "n",
+    "<cr>",
+    "<cmd>lua require('base46.preview').save_conf()<cr><esc>",
+    map_opts
+  )
 
   vim.api.nvim_win_set_width(winnr, 30)
 
@@ -78,19 +91,19 @@ M.open_themes_list = function()
     end,
     buffer = bufnr,
   })
-  
-    vim.api.nvim_create_autocmd("BufEnter", {
+
+  vim.api.nvim_create_autocmd("BufEnter", {
     callback = function()
-        vim.o.guicursor = "n:hor2"
+      vim.o.guicursor = "n:hor2"
     end,
-     buffer = bufnr,
+    buffer = bufnr,
   })
-  
-    vim.api.nvim_create_autocmd("BufLeave", {
+
+  vim.api.nvim_create_autocmd("BufLeave", {
     callback = function()
-        vim.o.guicursor = "n:block"
+      vim.o.guicursor = "n:block"
     end,
-     buffer = bufnr,
+    buffer = bufnr,
   })
 
   local config = require("base46.config").get()
@@ -133,7 +146,10 @@ M.save_conf = function()
   local config = require("base46.config").get()
   local f = io.open(config.themecfg, "w")
   if f ~= nil then
-    local conf = { background = config.cur_background, [config.cur_background] = config.current_theme }
+    local conf = {
+      background = config.cur_background,
+      [config.cur_background] = config.current_theme,
+    }
     conf = require("base46.utils").merge_tb(config.theme, conf)
     f:write(vim.json.encode(conf))
     io.close(f)
