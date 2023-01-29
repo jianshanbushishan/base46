@@ -148,7 +148,7 @@ M.create_highlight_for_preview = function(namespace, bufnr, pos)
   local config = require("base46.config").get()
   local filepath = config.cachepath .. "colors.json"
   local colors = {}
-  if not vim.fn.filereadable(filepath) then
+  if vim.fn.filereadable(filepath) == 0 then
     colors = M.export_colors()
   else
     local f = io.open(filepath, "r")
