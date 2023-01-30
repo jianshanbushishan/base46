@@ -41,8 +41,8 @@ M.on_move = function()
 end
 
 M.close = function()
-  -- vim.api.nvim_buf_clear_namespace(M.bufnr, M.namespace, 0, -1)
-  vim.api.nvim_win_close(M.winnr, true)
+  vim.api.nvim_buf_clear_namespace(0, -1, 0, -1)
+  vim.api.nvim_win_close(0, true)
 end
 
 M.open_themes_list = function()
