@@ -14,6 +14,7 @@ M.set_background = function(background)
   end
 
   require("base46.config").update({ cur_background = background })
+  vim.opt.background = background
   local theme = M.get_theme_by_filetype()
   M.load_theme(theme)
 end
@@ -142,7 +143,7 @@ M.switch_background = function()
   if config.cur_background == "light" then
     background = "dark"
   end
-  require("base46").set_background(background)
+  M.set_background(background)
 end
 
 M.preview = function()
