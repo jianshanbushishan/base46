@@ -116,6 +116,7 @@ M.setup = function(opts)
 
   config = require("base46.config").get()
   M.set_background(config.theme.background)
+  require("base46.term")
 end
 
 M.get_theme_by_filetype = function()
