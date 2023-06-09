@@ -44,7 +44,7 @@ end
 
 M.update = function(opts)
   vim.g.base46_config = vim.tbl_deep_extend("force", vim.g.base46_config, opts)
-  vim.g.base46_cache = vim.g.base46_config.cachepath
+  vim.g.base46_cache = vim.g.base46_config.cacheroot
 end
 
 M.init = function(opts)
