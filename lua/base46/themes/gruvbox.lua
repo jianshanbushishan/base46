@@ -1,3 +1,6 @@
+-- Credits to original https://github.com/morhetz/gruvbox
+-- This is modified version of it
+
 local M = {}
 
 M.base_30 = {
@@ -55,5 +58,15 @@ M.base_16 = {
 M.type = "dark"
 
 M = require("base46.utils").override_theme(M, "gruvbox")
+
+M.polish_hl = {
+  Operator = {
+    fg = M.base_30.nord_blue,
+  },
+
+  ["@operator"] = {
+    fg = M.base_30.nord_blue,
+  },
+}
 
 return M

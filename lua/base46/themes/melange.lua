@@ -75,8 +75,8 @@ M.polish_hl = {
   },
 
   Boolean = {
-    fg = M.base_30.purple,
-  },
+    fg = M.base_30.purple
+  }
 }
 
 M = require("base46.utils").override_theme(M, "melange")

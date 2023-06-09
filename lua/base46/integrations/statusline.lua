@@ -261,39 +261,36 @@ M.minimal = {
   },
 }
 
+local hlgroups_minimal_glassy = {
+  "St_lspError",
+  "St_lspWarning",
+  "St_LspHints",
+  "St_gitIcons",
+  "St_LspInfo",
+  "St_EmptySpace",
+  "St_LspProgress",
+  "St_sep_r",
+}
+
+if config.transparency then
+  for _, value in ipairs(hlgroups_minimal_glassy) do
+    M.minimal[value].bg = "NONE"
+  end
+end
+
 -- add common lsp highlights
 M.default = merge_tb("force", M.default, Lsp_highlights)
 M.vscode_colored = merge_tb("force", M.vscode_colored, Lsp_highlights)
 
 local function genModes_hl(modename, col)
-  M.default["St_" .. modename .. "Mode"] = {
-    fg = colors.black,
-    bg = colors[col],
-    bold = true,
-  }
+  M.default["St_" .. modename .. "Mode"] = { fg = colors.black, bg = colors[col], bold = true }
   M.default["St_" .. modename .. "ModeSep"] = { fg = colors[col], bg = colors.grey }
 
-  M.vscode_colored["St_" .. modename .. "Mode"] = {
-    fg = colors[col],
-    bg = colors.one_bg3,
-    bold = true,
-  }
+  M.vscode_colored["St_" .. modename .. "Mode"] = { fg = colors[col], bg = colors.one_bg3, bold = true }
 
-  M.minimal["St_" .. modename .. "Mode"] = {
-    fg = colors.black,
-    bg = colors[col],
-    bold = true,
-  }
-  M.minimal["St_" .. modename .. "ModeSep"] = {
-    fg = colors[col],
-    bg = colors.black,
-    bold = true,
-  }
-  M.minimal["St_" .. modename .. "modeText"] = {
-    fg = colors[col],
-    bg = colors.one_bg,
-    bold = true,
-  }
+  M.minimal["St_" .. modename .. "Mode"] = { fg = colors.black, bg = colors[col], bold = true }
+  M.minimal["St_" .. modename .. "ModeSep"] = { fg = colors[col], bg = colors.black, bold = true }
+  M.minimal["St_" .. modename .. "modeText"] = { fg = colors[col], bg = colors.one_bg, bold = true }
 end
 
 -- add mode highlights

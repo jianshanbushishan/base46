@@ -1,3 +1,6 @@
+-- Credits to original https://github.com/sainnhe/everforest
+-- This is modified version of it
+
 local M = {}
 
 M.base_30 = {
@@ -51,6 +54,7 @@ M.base_16 = {
   base0E = "#e67e80",
   base0F = "#d699b6",
 }
+
 
 M.type = "dark"
 

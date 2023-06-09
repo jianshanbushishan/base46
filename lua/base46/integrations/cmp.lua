@@ -4,6 +4,7 @@ local colors = require("base46.utils").get_theme_tb("base_30")
 local highlights = {
   CmpItemAbbr = { fg = colors.white },
   CmpItemAbbrMatch = { fg = colors.blue, bold = true },
+  CmpDoc = { bg = colors.darker_black },
   CmpDocBorder = { fg = colors.darker_black, bg = colors.darker_black },
   CmpPmenu = { bg = colors.black },
   CmpSel = { link = "PmenuSel", bold = true },
@@ -64,7 +65,7 @@ local styles = {
   atom_colored = {
     CmpItemMenu = { fg = colors.light_grey, italic = true },
     CmpPmenu = {
-      bg = colors.darker_black,
+      bg = colors.black2,
     },
 
     CmpDoc = { bg = colors.darker_black },
@@ -96,23 +97,18 @@ local generate_color = require("base46.colors").change_hex_lightness
 -- override item_kind highlights for atom style
 if cmp_ui.style == "atom" then
   for key, value in pairs(item_kinds) do
-    item_kinds[key] = vim.tbl_deep_extend("force", value, {
-      bg = vim.o.bg == "dark" and generate_color(colors.black2, 6) or generate_color(
-        colors.black2,
-        -6
-      ),
-    })
+    item_kinds[key] = vim.tbl_deep_extend(
+      "force",
+      value,
+      { bg = vim.o.bg == "dark" and generate_color(colors.black2, 6) or generate_color(colors.black2, -6) }
+    )
   end
 end
 
 -- override item_kind highlights for atom_colored style
 if cmp_ui.style == "atom_colored" then
   for key, value in pairs(item_kinds) do
-    item_kinds[key] = {
-      fg = vim.o.bg == "dark" and "#ffffff" or colors.black,
-      bg = generate_color(value.fg, -3),
-      bold = true,
-    }
+    item_kinds[key] = { fg = colors.black, bg = generate_color(value.fg, -3), bold = true }
   end
 end
 
@@ -120,11 +116,8 @@ highlights = vim.tbl_deep_extend("force", highlights, styles[cmp_ui.style] or {}
 highlights = vim.tbl_deep_extend("force", highlights, item_kinds)
 
 if cmp_ui.selected_item_bg == "simple" then
-  highlights.CmpSel = {
-    fg = colors.white,
-    bg = (highlights.CmpPmenu.bg == colors.black2 and colors.grey or colors.one_bg3),
-    bold = true,
-  }
+  highlights.CmpSel =
+    { fg = colors.white, bg = (highlights.CmpPmenu.bg == colors.black2 and colors.grey or colors.one_bg3), bold = true }
 end
 
 return highlights

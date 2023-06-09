@@ -3,18 +3,46 @@ local colors = require("base46.utils").get_theme_tb("base_30")
 
 return {
 
-  DiffAdd = { bg = "#1e3425" },
-  DiffAdded = { bg = "#1e3425" },
-  DiffChange = { bg = colors.black },
-  DiffChangeDelete = { fg = colors.red },
-  DiffModified = { fg = colors.orange },
-  DiffDelete = { bg = "#3b2021" },
-  DiffRemoved = { fg = colors.red, bg = "#3b2021" },
-  DiffText = { bg = colors.light_grey },
+  diffOldFile = {
+    fg = colors.baby_pink,
+  },
 
-  -- diffview.nvim
-  DiffviewFilePanelTitle = { fg = colors.cyan, bold = true },
-  DiffviewDiffAddAsDelete = { bg = "#3b2021" },
+  diffNewFile = {
+    fg = colors.blue,
+  },
+
+  DiffAdd = {
+    fg = colors.blue,
+  },
+
+  DiffAdded = {
+    fg = colors.green,
+  },
+
+  DiffChange = {
+    fg = colors.light_grey,
+  },
+
+  DiffChangeDelete = {
+    fg = colors.red,
+  },
+
+  DiffModified = {
+    fg = colors.orange,
+  },
+
+  DiffDelete = {
+    fg = colors.red,
+  },
+
+  DiffRemoved = {
+    fg = colors.red,
+  },
+
+  DiffText = {
+    fg = colors.white,
+    bg = colors.black2,
+  },
 
   -- git commits
   gitcommitOverflow = {
