@@ -1,8 +1,8 @@
 local M = {}
 
 M.default = {
-  cachepath = vim.fn.stdpath("data") .. "/colorscheme/",
-  themecfg = vim.fn.stdpath("data") .. "/theme.conf",
+  cachepath = vim.fn.stdpath "data" .. "/colorscheme/",
+  themecfg = vim.fn.stdpath "data" .. "/theme.conf",
   cur_background = "",
 
   theme = {
@@ -44,6 +44,7 @@ end
 
 M.update = function(opts)
   vim.g.base46_config = vim.tbl_deep_extend("force", vim.g.base46_config, opts)
+  vim.g.base46_cache = vim.g.base46_config.cachepath
 end
 
 M.init = function(opts)
