@@ -18,8 +18,7 @@ end
 
 M.on_move = function()
   if M.lastline ~= -1 then
-    local theme =
-      vim.api.nvim_buf_get_lines(M.bufnr, M.lastline, M.lastline + 1, false)[1]
+    local theme = vim.api.nvim_buf_get_lines(M.bufnr, M.lastline, M.lastline + 1, false)[1]
     local hl_name = require("base46.utils").get_hl_name(theme)
     vim.api.nvim_buf_clear_namespace(M.bufnr, M.namespace, M.lastline, M.lastline + 1)
     vim.api.nvim_buf_add_highlight(M.bufnr, M.namespace, hl_name, M.lastline, 0, -1)
@@ -27,13 +26,7 @@ M.on_move = function()
 
   local line = M.get_select()
   local cursor_pos = vim.api.nvim_win_get_cursor(M.winnr)
-  vim.api.nvim_buf_set_virtual_text(
-    M.bufnr,
-    M.namespace,
-    line,
-    { { tostring("<-------"), "Error" } },
-    {}
-  )
+  vim.api.nvim_buf_set_virtual_text(M.bufnr, M.namespace, line, { { tostring("<-------"), "Error" } }, {})
 
   M.lastline = line
   local theme = vim.api.nvim_buf_get_lines(M.bufnr, line, line + 1, false)[1]
@@ -63,25 +56,13 @@ M.open_themes_list = function()
   M.winnr = winnr
 
   local map_opts = { noremap = true, silent = true }
-  vim.api.nvim_buf_set_keymap(
-    bufnr,
-    "n",
-    "q",
-    "<cmd>lua require('base46.preview').close()<cr><esc>",
-    map_opts
-  )
+  vim.api.nvim_buf_set_keymap(bufnr, "n", "q", "<cmd>lua require('base46.preview').close()<cr><esc>", map_opts)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "l", "", map_opts)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "h", "", map_opts)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "v", "", map_opts)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "V", "", map_opts)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "r", "", map_opts)
-  vim.api.nvim_buf_set_keymap(
-    bufnr,
-    "n",
-    "<cr>",
-    "<cmd>lua require('base46.preview').save_conf()<cr><esc>",
-    map_opts
-  )
+  vim.api.nvim_buf_set_keymap(bufnr, "n", "<cr>", "<cmd>lua require('base46.preview').save_conf()<cr><esc>", map_opts)
 
   vim.api.nvim_win_set_width(winnr, 30)
 

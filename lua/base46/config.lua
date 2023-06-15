@@ -1,8 +1,8 @@
 local M = {}
 
 M.default = {
-  cachepath = vim.fn.stdpath "data" .. "/colorscheme/",
-  themecfg = vim.fn.stdpath "data" .. "/theme.conf",
+  cachepath = vim.fn.stdpath("data") .. "/colorscheme/",
+  themecfg = vim.fn.stdpath("data") .. "/theme.conf",
   cur_background = "",
 
   theme = {

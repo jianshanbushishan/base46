@@ -1,5 +1,5 @@
-local colors = require("base46.utils").get_theme_tb "base_30"
-local theme = require("base46.utils").get_theme_tb "base_16"
+local colors = require("base46.utils").get_theme_tb("base_30")
+local theme = require("base46.utils").get_theme_tb("base_16")
 
 local generate_color = require("base46.colors").change_hex_lightness
 
@@ -243,6 +243,6 @@ local defaults = {
 
 -- merge statusilne & hl_add tables!
 local merge_tb = require("base46.utils").merge_tb
-defaults = merge_tb(defaults, require("base46.utils").load_highlight "statusline")
+defaults = merge_tb(defaults, require("base46.utils").load_highlight("statusline"))
 
 return defaults

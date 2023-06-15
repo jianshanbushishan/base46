@@ -30,7 +30,7 @@ end
 
 M.turn_str_to_color = function(tb_in)
   local tb = vim.deepcopy(tb_in)
-  local colors = M.get_theme_tb "base_30"
+  local colors = M.get_theme_tb("base_30")
 
   for _, groups in pairs(tb) do
     for k, v in pairs(groups) do
@@ -47,7 +47,7 @@ M.turn_str_to_color = function(tb_in)
 end
 
 M.extend_default_hl = function(highlights)
-  local polish_hl = M.get_theme_tb "polish_hl"
+  local polish_hl = M.get_theme_tb("polish_hl")
 
   -- polish themes
   if polish_hl then
@@ -85,8 +85,7 @@ M.table_to_str = function(tb)
     local opts = ""
 
     for optName, optVal in pairs(hlgroup_vals) do
-      local valueInStr = ((type(optVal)) == "boolean" or type(optVal) == "number")
-          and tostring(optVal)
+      local valueInStr = ((type(optVal)) == "boolean" or type(optVal) == "number") and tostring(optVal)
         or '"' .. optVal .. '"'
       opts = opts .. optName .. "=" .. valueInStr .. ","
     end
@@ -103,9 +102,7 @@ M.save_to_cache = function(filename, tb)
 
   local config = require("base46.config").get()
 
-  local lines = 'require("base46").compiled = string.dump(function()'
-    .. M.table_to_str(tb)
-    .. "end)"
+  local lines = 'require("base46").compiled = string.dump(function()' .. M.table_to_str(tb) .. "end)"
   local file = io.open(config.cacheroot .. filename, "wb")
 
   loadstring(lines, "=")()
@@ -127,15 +124,13 @@ M.compile = function()
 
     -- merge new hl groups added by users
     if filename == "defaults" then
-      integration =
-        M.merge_tb(integration, (M.turn_str_to_color(config.highlight.hl_add)))
+      integration = M.merge_tb(integration, (M.turn_str_to_color(config.highlight.hl_add)))
     end
 
     M.save_to_cache(filename, integration)
   end
 
-  local ex_files =
-    vim.api.nvim_get_runtime_file("lua/base46/extended_integrations/*.lua", true)
+  local ex_files = vim.api.nvim_get_runtime_file("lua/base46/extended_integrations/*.lua", true)
   for _, integration in ipairs(ex_files) do
     local filename = vim.fn.fnamemodify(integration, ":t:r")
     M.save_to_cache(filename, require("base46.extended_integrations." .. filename))
@@ -144,7 +139,7 @@ M.compile = function()
   local bg_file = io.open(config.cacheroot .. "bg", "wb")
 
   if bg_file then
-    bg_file:write("vim.opt.bg='" .. M.get_theme_tb "type" .. "'")
+    bg_file:write("vim.opt.bg='" .. M.get_theme_tb("type") .. "'")
     bg_file:close()
   end
 end
@@ -161,7 +156,7 @@ M.create_highlight_for_preview = function(namespace, bufnr, pos)
       return
     end
 
-    local content = f:read "*a"
+    local content = f:read("*a")
     f:close()
 
     colors = vim.json.decode(content)
@@ -202,7 +197,7 @@ M.export_colors = function()
 end
 
 M.load_all_highlights = function()
-  require("plenary.reload").reload_module "base46"
+  require("plenary.reload").reload_module("base46")
   M.compile()
 
   local config = require("base46.config").get()

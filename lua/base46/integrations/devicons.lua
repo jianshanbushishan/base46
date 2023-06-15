@@ -29,9 +29,9 @@ return {
   DevIconxz = { fg = colors.sun },
   DevIconzip = { fg = colors.sun },
   DevIconZig = { fg = colors.orange },
-  DevIconMd = {fg = colors.blue},
-  DevIconTSX = {fg = colors.blue},
-  DevIconJSX = {fg = colors.blue},
-  DevIconSvelte = {fg = colors.red},
-  DevIconJava = {fg = colors.orange}
+  DevIconMd = { fg = colors.blue },
+  DevIconTSX = { fg = colors.blue },
+  DevIconJSX = { fg = colors.blue },
+  DevIconSvelte = { fg = colors.red },
+  DevIconJava = { fg = colors.orange },
 }

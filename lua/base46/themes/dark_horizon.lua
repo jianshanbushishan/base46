@@ -1,5 +1,5 @@
--- Credits to original theme https://github.com/michael-ball/base16-horizon-scheme 
--- This is a modified version 
+-- Credits to original theme https://github.com/michael-ball/base16-horizon-scheme
+-- This is a modified version
 
 local M = {}
 

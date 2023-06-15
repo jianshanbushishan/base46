@@ -1,4 +1,4 @@
-local colors = require("base46.utils").get_theme_tb "base_30"
+local colors = require("base46.utils").get_theme_tb("base_30")
 
 return {
   nvUpdaterTitle = { fg = colors.black, bg = colors.orange },
