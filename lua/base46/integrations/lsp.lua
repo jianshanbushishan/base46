@@ -5,6 +5,7 @@ return {
   LspReferenceText = { fg = colors.darker_black, bg = colors.white },
   LspReferenceRead = { fg = colors.darker_black, bg = colors.white },
   LspReferenceWrite = { fg = colors.darker_black, bg = colors.white },
+  LspInlayHint = { fg = colors.grey },
 
   -- Lsp Diagnostics
   DiagnosticHint = { fg = colors.purple },
