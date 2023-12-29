@@ -35,6 +35,7 @@ M.default = {
     "nvimtree",
     "mason",
     "blankline",
+    "trouble",
   },
 }
 

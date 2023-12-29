@@ -5,6 +5,8 @@ return {
   NvimTreeEndOfBuffer = { fg = colors.darker_black },
   NvimTreeFolderIcon = { fg = colors.folder_bg },
   NvimTreeFolderName = { fg = colors.folder_bg },
+  NvimTreeFolderArrowOpen = { fg = colors.folder_bg },
+  NvimTreeFolderArrowClosed = { fg = colors.grey_fg },
   NvimTreeGitDirty = { fg = colors.red },
   NvimTreeIndentMarker = { fg = colors.grey_fg },
   NvimTreeNormal = { bg = colors.darker_black },

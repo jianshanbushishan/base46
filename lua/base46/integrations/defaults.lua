@@ -65,8 +65,8 @@ local defaults = {
   },
 
   Folded = {
-    fg = theme.base03,
-    bg = theme.base01,
+    fg = colors.light_grey,
+    bg = colors.black2,
   },
 
   IncSearch = {
