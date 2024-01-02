@@ -36,6 +36,7 @@ M.default = {
     "mason",
     "blankline",
     "trouble",
+    "codeactionmenu",
   },
 }
 
