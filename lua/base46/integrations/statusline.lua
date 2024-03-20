@@ -2,18 +2,6 @@ local colors = require("base46.utils").get_theme_tb("base_30")
 local generate_color = require("base46.colors").change_hex_lightness
 local merge_tb = vim.tbl_deep_extend
 
--- change color values according to statusilne themes
-local config = require("nvchad_ui").statusline
-local statusline_theme = config.theme
-
-if statusline_theme == "vscode" then
-  colors.statusline_bg = generate_color(colors.statusline_bg, 1)
-  colors.light_grey = generate_color(colors.light_grey, 20)
-elseif statusline_theme == "vscode_colored" then
-  colors.statusline_bg = generate_color(colors.statusline_bg, 1)
-  colors.light_grey = generate_color(colors.light_grey, 25)
-end
-
 local Lsp_highlights = {
   St_lspError = {
     fg = colors.red,
