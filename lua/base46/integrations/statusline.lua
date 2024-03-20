@@ -275,6 +275,8 @@ local function genModes_hl(modename, col)
   M.minimal["St_" .. modename .. "modeText"] = { fg = colors[col], bg = colors.one_bg, bold = true }
 end
 
+local statusline_theme = "default"
+
 -- add mode highlights
 if statusline_theme == "default" then
   genModes_hl("Normal", "nord_blue")
