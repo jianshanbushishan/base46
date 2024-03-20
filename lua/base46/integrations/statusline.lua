@@ -260,12 +260,6 @@ local hlgroups_minimal_glassy = {
   "St_sep_r",
 }
 
-if config.transparency then
-  for _, value in ipairs(hlgroups_minimal_glassy) do
-    M.minimal[value].bg = "NONE"
-  end
-end
-
 -- add common lsp highlights
 M.default = merge_tb("force", M.default, Lsp_highlights)
 M.vscode_colored = merge_tb("force", M.vscode_colored, Lsp_highlights)
