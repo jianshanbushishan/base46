@@ -82,6 +82,9 @@ return {
     fg = colors.black2,
     bg = colors.black2,
   },
+  BufferLineNumbers = {
+    bg = colors.black,
+  },
 
   -- tabs
   BufferLineTab = {
@@ -101,7 +104,7 @@ return {
     bg = "none",
   },
 
-  BufferLineDevIconDefaultInactive = {
+  BufferLineDevIconLua = {
     bg = "none",
   },
 
