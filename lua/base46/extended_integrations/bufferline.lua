@@ -82,8 +82,10 @@ return {
     fg = colors.black2,
     bg = colors.black2,
   },
+
   BufferLineNumbers = {
-    bg = colors.black,
+    fg = colors.light_grey,
+    bg = colors.black2,
   },
 
   -- tabs
@@ -105,7 +107,8 @@ return {
   },
 
   BufferLineDevIconLua = {
-    bg = "none",
+    fg = colors.light_grey,
+    bg = colors.black2,
   },
 
   BufferLineDuplicate = {
