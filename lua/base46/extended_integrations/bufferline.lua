@@ -88,6 +88,10 @@ return {
     bg = colors.black2,
   },
 
+  BufferLineNumbersVisible = {
+    fg = colors.white,
+    bg = colors.black,
+  },
   -- tabs
   BufferLineTab = {
     fg = colors.light_grey,
@@ -105,7 +109,26 @@ return {
   BufferLineDevIconDefaultSelected = {
     bg = "none",
   },
-
+  BufferLineDevIconZig = {
+    fg = colors.light_grey,
+    bg = colors.black2,
+  },
+  BufferLineDevIconC = {
+    fg = colors.light_grey,
+    bg = colors.black2,
+  },
+  BufferLineDevIconH = {
+    fg = colors.light_grey,
+    bg = colors.black2,
+  },
+  BufferLineDevIconPy = {
+    fg = colors.light_grey,
+    bg = colors.black2,
+  },
+  BufferLineDevIconRs = {
+    fg = colors.light_grey,
+    bg = colors.black2,
+  },
   BufferLineDevIconLua = {
     fg = colors.light_grey,
     bg = colors.black2,
