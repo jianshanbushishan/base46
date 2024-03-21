@@ -88,10 +88,14 @@ return {
     bg = colors.black2,
   },
 
-  BufferLineNumbersVisible = {
+  BufferLineNumbersSelected = {
     fg = colors.white,
     bg = colors.black,
   },
+  -- BufferLineNumbersVisible = {
+  --   fg = colors.white,
+  --   bg = colors.black,
+  -- },
   -- tabs
   BufferLineTab = {
     fg = colors.light_grey,
