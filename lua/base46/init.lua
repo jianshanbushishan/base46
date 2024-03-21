@@ -97,6 +97,16 @@ M.setup = function(opts)
                 M.load_conf(fc)
                 config = require("base46.config").get()
                 M.set_background(config.theme.background)
+                local present, lualine = pcall(require, "lualine")
+                if present then
+                  local cfg = lualine.get_config()
+                  if config.theme.background == "light" then
+                    cfg.options.theme="onelight"
+                  else  
+                    cfg.options.theme="onedark"
+                  end
+                  lualine.setup(cfg)
+                end
               end
             end, 100)
           end
