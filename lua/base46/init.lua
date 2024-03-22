@@ -67,20 +67,6 @@ M.load_conf = function(f)
   require("base46.config").update({ theme = opts })
 end
 
-local function refresh_ui(config)
-  local present, lualine = pcall(require, "lualine")
-  if present then
-    local cfg = lualine.get_config()
-    cfg.options.theme = config.lualine[config.theme.background]
-    lualine.setup(cfg)
-  end
-  local present, _ = pcall(require, "cokeline")
-  if present then
-    require("cokeline.hlgroups")._cache_clear()
-    config.cokeline()
-  end
-end
-
 M.setup = function(opts)
   local config = require("base46.config").init(opts)
   local f = io.open(config.themecfg, "r")
@@ -111,7 +97,7 @@ M.setup = function(opts)
                 M.load_conf(fc)
                 config = require("base46.config").get()
                 M.set_background(config.theme.background)
-                refresh_ui(config)
+                config.refresh(config.theme.background)
               end
             end, 100)
           end
@@ -132,7 +118,7 @@ M.setup = function(opts)
   config = require("base46.config").get()
   M.set_background(config.theme.background)
   require("base46.term")
-  refresh_ui(config)
+  config.refresh(config.theme.background)
 end
 
 M.get_theme_by_filetype = function()
