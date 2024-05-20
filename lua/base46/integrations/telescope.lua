@@ -1,4 +1,6 @@
-local colors = require("base46.utils").get_theme_tb("base_30")
+local colors = require("base46").get_theme_tb("base_30")
+
+local telescope_style = "borderless"
 
 local hlgroups = {
 
@@ -23,6 +25,8 @@ local hlgroups = {
   TelescopeResultsDiffAdd = { fg = colors.green },
   TelescopeResultsDiffChange = { fg = colors.yellow },
   TelescopeResultsDiffDelete = { fg = colors.red },
+
+  TelescopeMatching = { bg = colors.one_bg, fg = colors.blue },
 }
 
 local styles = {
@@ -45,4 +49,6 @@ local styles = {
   },
 }
 
-return hlgroups
+local result = vim.tbl_deep_extend("force", hlgroups, styles[telescope_style])
+
+return result
