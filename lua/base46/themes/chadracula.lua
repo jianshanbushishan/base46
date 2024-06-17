@@ -56,8 +56,10 @@ M.base_16 = {
 }
 
 M.polish_hl = {
-  ["@function.builtin"] = { fg = M.base_30.cyan },
-  ["@number"] = { fg = M.base_30.purple },
+  treesiter = {
+    ["@function.builtin"] = { fg = M.base_30.cyan },
+    ["@number"] = { fg = M.base_30.purple },
+  },
 }
 
 M.type = "dark"
