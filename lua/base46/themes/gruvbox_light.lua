@@ -58,9 +58,7 @@ M.base_16 = {
 M.type = "light"
 
 M.polish_hl = {
-  tbline = {
-    TbLineThemeToggleBtn = { fg = M.base_30.black, bg = M.base_30.white },
-  },
+  TbLineThemeToggleBtn = { fg = M.base_30.black, bg = M.base_30.white },
 }
 
 M = require("base46.utils").override_theme(M, "gruvbox_light")

@@ -53,20 +53,32 @@ M.base_16 = {
   base0C = "#22839b",
   base0D = "#4380bc",
   base0E = "#ac78bd",
-  base0F = "#ca7081",
+  base0F = "#A1A641",
 }
 
 M.polish_hl = {
-  treesitter = {
-    ["@function.builtin"] = { fg = M.base_30.teal },
-    ["@variable.member.key"] = { fg = M.base_30.red },
-    ["@punctuation.bracket"] = { fg = M.base_30.coal },
-    ["@variable.member"] = { fg = M.base_30.coal },
+  ["@function.builtin"] = {
+    fg = M.base_30.teal,
   },
 
-  syntax = {
-    Constant = { fg = M.base_30.red },
-    Include = { fg = M.base_30.dark_purple },
+  ["@field.key"] = {
+    fg = M.base_30.red,
+  },
+
+  Constant = {
+    fg = M.base_30.red,
+  },
+
+  ["@punctuation.bracket"] = {
+    fg = M.base_30.coal,
+  },
+
+  ["@field"] = {
+    fg = M.base_30.coal,
+  },
+
+  Include = {
+    fg = M.base_30.dark_purple,
   },
 }
 

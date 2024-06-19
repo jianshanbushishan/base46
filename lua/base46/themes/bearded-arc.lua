@@ -5,7 +5,7 @@ local M = {}
 
 M.base_30 = {
   white = "#ABB7C1",
-  darker_black = "#19212e",
+  darker_black = "#151d2c",
   black = "#1c2433", -- nvim bg
   black2 = "#232b3a",
   one_bg = "#262e3d",
@@ -25,7 +25,7 @@ M.base_30 = {
   blue = "#69C3FF",
   yellow = "#EACD61",
   sun = "#f6d96d",
-  purple = "#bd93ff",
+  purple = "#B788E5",
   dark_purple = "#B78AFF",
   teal = "#12c7c4",
   orange = "#FF955C",
@@ -52,15 +52,34 @@ M.base_16 = {
   base0C = "#77aed7",
   base0D = "#69C3FF",
   base0E = "#22ECDB",
-  base0F = "#B78AFF",
+  base0F = "#FF738A",
 }
 
 M.type = "dark"
 
 M.polish_hl = {
-  treesitter = {
-    ["@variable.parameter"] = { fg = M.base_30.pink },
-    ["@attribute"] = { fg = M.base_30.purple },
+  Conditional = {
+    fg = M.base_30.yellow,
+  },
+
+  ["@constructor"] = {
+    fg = M.base_16.blue,
+  },
+
+  ["@punctuation.bracket"] = {
+    fg = M.base_30.dark_purple,
+  },
+
+  ["@keyword.return"] = {
+    fg = M.base_30.yellow,
+  },
+
+  Include = {
+    fg = M.base_30.yellow,
+  },
+
+  ["@parameter"] = {
+    fg = M.base_30.pink,
   },
 }
 

@@ -58,12 +58,25 @@ M.base_16 = {
 M.type = "dark"
 
 M.polish_hl = {
-  treesitter = {
-    ["@punctuation.bracket"] = { fg = M.base_30.orange },
-    ["@string"] = { fg = M.base_30.white },
-    ["@variable.member.key"] = { fg = M.base_30.white },
-    ["@constructor"] = { fg = M.base_30.vibrant_green },
-    ["@tag.attribute"] = { link = "@function.method" },
+  ["@punctuation.bracket"] = {
+    fg = M.base_30.orange,
+  },
+
+  ["@string"] = {
+    fg = M.base_30.white,
+  },
+
+  ["@field.key"] = {
+    fg = M.base_30.white,
+  },
+
+  ["@constructor"] = {
+    fg = M.base_30.vibrant_green,
+    bold = true,
+  },
+
+  ["@tag.attribute"] = {
+    link = "@method",
   },
 }
 

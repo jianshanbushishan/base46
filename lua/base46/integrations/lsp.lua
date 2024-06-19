@@ -11,7 +11,7 @@ return {
   DiagnosticHint = { fg = colors.purple },
   DiagnosticError = { fg = colors.red },
   DiagnosticWarn = { fg = colors.yellow },
-  DiagnosticInfo = { fg = colors.green },
+  DiagnosticInformation = { fg = colors.green },
   LspSignatureActiveParameter = { fg = colors.black, bg = colors.green },
 
   RenamerTitle = { fg = colors.black, bg = colors.red },

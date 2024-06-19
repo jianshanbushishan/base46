@@ -56,11 +56,10 @@ M.base_16 = {
 }
 
 M.polish_hl = {
-  treesitter = {
-    ["@variable.parameter"] = { fg = M.base_30.orange },
-    ["@keyword.return"] = { fg = M.base_30.cyan },
-    ["@keyword.conditional"] = { fg = M.base_30.cyan },
-  },
+  ["@parameter"] = { fg = M.base_30.orange },
+  ["@keyword.return"] = { fg = M.base_30.cyan },
+  ["@conditional"] = { fg = M.base_30.cyan },
+  PmenuSel = { bg = M.base_30.blue },
 }
 
 M.type = "dark"

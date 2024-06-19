@@ -57,16 +57,11 @@ M.base_16 = {
 }
 
 M.polish_hl = {
-  syntax = {
-    Include = { fg = M.base_16.base0E, bold = true },
-  },
-
-  treesitter = {
-    ["@property"] = { fg = M.base_16.base0E },
-    ["@tag.delimiter"] = { fg = M.base_16.base05 },
-    ["@punctuation.bracket"] = { fg = M.base_30.yellow },
-    ["@punctuation.delimiter"] = { fg = M.base_30.yellow },
-  },
+  Include = { fg = M.base_16.base0E, bold = true },
+  ["@property"] = { fg = M.base_16.base0E },
+  ["@tag.delimiter"] = { fg = M.base_16.base05 },
+  ["@punctuation.bracket"] = { fg = M.base_30.yellow },
+  ["@punctuation.delimiter"] = { fg = M.base_30.yellow },
 }
 
 M.type = "dark"

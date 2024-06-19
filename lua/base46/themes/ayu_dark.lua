@@ -56,14 +56,12 @@ M.base_16 = {
 }
 
 M.polish_hl = {
-  treesitter = {
-    luaTSField = { fg = M.base_16.base0D },
-    ["@tag.delimiter"] = { fg = M.base_30.cyan },
-    ["@function"] = { fg = M.base_30.orange },
-    ["@variable.parameter"] = { fg = M.base_16.base0F },
-    ["@constructor"] = { fg = M.base_16.base0A },
-    ["@tag.attribute"] = { fg = M.base_30.orange },
-  },
+  luaTSField = { fg = M.base_16.base0D },
+  ["@tag.delimiter"] = { fg = M.base_30.cyan },
+  ["@function"] = { fg = M.base_30.orange },
+  ["@parameter"] = { fg = M.base_16.base0F },
+  ["@constructor"] = { fg = M.base_16.base0A },
+  ["@tag.attribute"] = { fg = M.base_30.orange },
 }
 
 M = require("base46.utils").override_theme(M, "ayu-dark")

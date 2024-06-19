@@ -58,10 +58,8 @@ M.base_16 = {
 M.type = "dark"
 
 M.polish_hl = {
-  treesitter = {
-    ["@tag"] = { fg = M.base_30.orange },
-    ["@tag.delimiter"] = { fg = M.base_30.green },
-  },
+  ["@tag"] = { fg = M.base_30.orange },
+  ["@tag.delimiter"] = { fg = M.base_30.green },
 }
 
 M = require("base46.utils").override_theme(M, "everforest")

@@ -57,12 +57,11 @@ M.base_16 = {
 }
 
 M.polish_hl = {
-  treesitter = {
-    ["@variable.parameter"] = { fg = M.base_16.base0A },
+  ["@parameter"] = {
+    fg = M.base_16.base0A,
   },
-
-  syntax = {
-    Constant = { fg = M.base_16.base09 },
+  Constant = {
+    fg = M.base_16.base09,
   },
 }
 
