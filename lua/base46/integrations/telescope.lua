@@ -1,6 +1,6 @@
 local colors = require("base46.utils").get_theme_tb("base_30")
 
-local telescope_style = "borderless"
+local telescope_style = "bordered"
 
 local hlgroups = {
 
