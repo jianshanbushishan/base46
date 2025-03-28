@@ -1,5 +1,5 @@
-local theme = require("base46.utils").get_theme_tb "base_16"
-local base30 = require("base46.utils").get_theme_tb "base_30"
+local theme = require("base46.utils").get_theme_tb("base_16")
+local base30 = require("base46.utils").get_theme_tb("base_30")
 
 return {
 
@@ -78,11 +78,11 @@ return {
   ["@markup.strikethrough"] = { strikethrough = true },
   ["@markup.quote"] = { bg = base30.black2 },
 
-  ["@comment"] = { fg = base30.grey_fg },
-  ["@comment.todo"] = { fg = base30.grey, bg = base30.white },
-  ["@comment.warning"] = { fg = base30.black2, bg = theme.base09 },
-  ["@comment.note"] = { fg = base30.black2, bg = base30.white },
-  ["@comment.danger"] = { fg = base30.black2, bg = base30.red },
+  ["@comment"] = { fg = base30.grey_fg, italic = true },
+  ["@comment.todo"] = { fg = base30.grey, bg = base30.white, italic = true },
+  ["@comment.warning"] = { fg = base30.black2, bg = theme.base09, italic = true },
+  ["@comment.note"] = { fg = base30.black2, bg = base30.white, italic = true },
+  ["@comment.danger"] = { fg = base30.black2, bg = base30.red, italic = true },
 
   ["@diff.plus"] = { fg = base30.green },
   ["@diff.minus"] = { fg = base30.red },
