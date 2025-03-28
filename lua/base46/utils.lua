@@ -1,6 +1,8 @@
 local M = {}
 
-M.get_valid_theme = function()
+local config = require("base46.config").get()
+
+function M.get_valid_theme()
   local themes = vim.api.nvim_get_runtime_file("lua/base46/themes/*.lua", true)
 
   for _, file in ipairs(themes) do
@@ -11,8 +13,7 @@ M.get_valid_theme = function()
   return ""
 end
 
-M.get_theme_tb = function(type)
-  local config = require("base46.config").get()
+function M.get_theme_tb(type)
   local default_path = "base46.themes." .. config.current_theme
 
   -- local present1, default_theme = pcall(require, default_path)
@@ -24,11 +25,11 @@ M.get_theme_tb = function(type)
   end
 end
 
-M.merge_tb = function(table1, table2)
+function M.merge_tb(table1, table2)
   return vim.tbl_deep_extend("force", table1, table2)
 end
 
-M.turn_str_to_color = function(tb_in)
+function M.turn_str_to_color(tb_in)
   local tb = vim.deepcopy(tb_in)
   local colors = M.get_theme_tb("base_30")
 
@@ -46,7 +47,7 @@ M.turn_str_to_color = function(tb_in)
   return tb
 end
 
-M.extend_default_hl = function(highlights)
+function M.extend_default_hl(highlights)
   local polish_hl = M.get_theme_tb("polish_hl")
 
   -- polish themes
@@ -58,7 +59,6 @@ M.extend_default_hl = function(highlights)
     end
   end
 
-  local config = require("base46.config").get()
   if config.highlight.hl_override then
     local overriden_hl = M.turn_str_to_color(config.highlight.hl_override)
 
@@ -70,14 +70,14 @@ M.extend_default_hl = function(highlights)
   end
 end
 
-M.load_highlight = function(group)
+function M.load_highlight(group)
   group = require("base46.integrations." .. group)
   M.extend_default_hl(group)
   return group
 end
 
 -- convert table into string
-M.table_to_str = function(tb)
+function M.table_to_str(tb)
   local result = ""
 
   for hlgroupName, hlgroup_vals in pairs(tb) do
@@ -96,11 +96,9 @@ M.table_to_str = function(tb)
   return result
 end
 
-M.save_to_cache = function(filename, tb)
+function M.save_to_cache(filename, tb)
   -- Thanks to https://github.com/EdenEast/nightfox.nvim
   -- It helped me understand string.dump stuff
-
-  local config = require("base46.config").get()
 
   local lines = 'require("base46").compiled = string.dump(function()' .. M.table_to_str(tb) .. "end)"
   local file = io.open(config.cacheroot .. filename, "wb")
@@ -113,10 +111,9 @@ M.save_to_cache = function(filename, tb)
   end
 end
 
-M.compile = function()
+function M.compile()
   -- All integration modules, each file returns a table
   local hl_files = vim.api.nvim_get_runtime_file("lua/base46/integrations/*.lua", true)
-  local config = require("base46.config").get()
 
   for _, file in ipairs(hl_files) do
     local filename = vim.fn.fnamemodify(file, ":t:r")
@@ -144,38 +141,13 @@ M.compile = function()
   end
 end
 
-M.create_highlight_for_preview = function(namespace, bufnr, pos)
-  local config = require("base46.config").get()
-  local filepath = config.cachepath .. "colors.json"
-  local colors = {}
-  if vim.fn.filereadable(filepath) == 0 then
-    colors = M.export_colors()
-  else
-    local f = io.open(filepath, "r")
-    if f == nil then
-      return
-    end
-
-    local content = f:read("*a")
-    f:close()
-
-    colors = vim.json.decode(content)
-  end
-
-  for theme, color in pairs(colors) do
-    local hl_name = M.get_hl_name(theme)
-    vim.api.nvim_set_hl(0, hl_name, { fg = color.fg, bg = color.bg })
-    vim.api.nvim_buf_add_highlight(bufnr, namespace, hl_name, pos[theme], 0, -1)
-  end
-end
-
-M.get_hl_name = function(theme)
+function M.get_hl_name(theme)
   local hl_name = "Preview_%s"
   hl_name = hl_name:format(theme:gsub("-", "_"))
   return hl_name
 end
 
-M.export_colors = function()
+function M.export_colors()
   local themes = vim.api.nvim_get_runtime_file("lua/base46/themes/*.lua", true)
 
   local colors = {}
@@ -185,7 +157,6 @@ M.export_colors = function()
     colors[theme] = { bg = color.base00, fg = color.base05 }
   end
 
-  local config = require("base46.config").get()
   local content = vim.json.encode(colors)
   local f = io.open(config.cachepath .. "colors.json", "w")
   if f then
@@ -196,18 +167,16 @@ M.export_colors = function()
   return colors
 end
 
-M.load_all_highlights = function()
+function M.load_all_highlights()
   require("plenary.reload").reload_module("base46")
   M.compile()
 
-  local config = require("base46.config").get()
   for _, file in ipairs(vim.fn.readdir(config.cacheroot)) do
     M.set_highlight(file)
   end
 end
 
-M.override_theme = function(default_theme, theme_name)
-  local config = require("base46.config").get()
+function M.override_theme(default_theme, theme_name)
   local changed_themes = config.changed_themes
 
   if changed_themes[theme_name] then
@@ -217,8 +186,7 @@ M.override_theme = function(default_theme, theme_name)
   end
 end
 
-M.set_highlight = function(plugin)
-  local config = require("base46.config").get()
+function M.set_highlight(plugin)
   loadfile(config.cacheroot .. plugin)()
 end
 

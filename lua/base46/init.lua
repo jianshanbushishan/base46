@@ -1,8 +1,10 @@
 local M = {}
 
+local bc = require("base46.config")
+local config = bc.get()
+
 local error = vim.log.levels.ERROR
-M.set_background = function(background)
-  local config = require("base46.config").get()
+function M.set_background(background)
   if config.cur_background == background then
     return
   end
@@ -13,13 +15,13 @@ M.set_background = function(background)
     background = "light"
   end
 
-  require("base46.config").update({ cur_background = background })
+  bc.update({ cur_background = background })
   vim.opt.background = background
   local theme = M.get_theme_by_filetype()
   M.load_theme(theme)
 end
 
-M.load_theme = function(theme)
+function M.load_theme(theme)
   if theme == nil then
     local valid = require("base46.utils").get_valid_theme()
     if valid == "" then
@@ -27,14 +29,13 @@ M.load_theme = function(theme)
       vim.notify(msg, error, { title = "Base46.nvim" })
       return
     else
-      print("invalid theme: " .. theme .. ", set theme to " .. valid)
+      vim.notify("invalid theme: " .. theme .. ", set theme to " .. valid)
       theme = valid
     end
   end
 
-  local config = require("base46.config").get()
   local root = config.cachepath .. "/" .. theme .. "/"
-  require("base46.config").update({ current_theme = theme, cacheroot = root })
+  bc.update({ current_theme = theme, cacheroot = root })
 
   local f = io.open(root .. "bg", "r")
   local utils = require("base46.utils")
@@ -56,19 +57,19 @@ M.load_theme = function(theme)
     for _, plugin in ipairs(config.integrations) do
       utils.set_highlight(plugin)
     end
-    require("base46.config").update({ cur_background = background })
+    bc.update({ cur_background = background })
   end
 end
 
-M.load_conf = function(f)
+function M.load_conf(f)
   local content = f:read("*a")
   local opts = vim.json.decode(content)
   io.close(f)
-  require("base46.config").update({ theme = opts })
+  bc.update({ theme = opts })
 end
 
-M.setup = function(opts)
-  local config = require("base46.config").init(opts)
+function M.setup(opts)
+  local config = bc.init(opts)
   local f = io.open(config.themecfg, "r")
   if f ~= nil then
     M.load_conf(f)
@@ -95,7 +96,6 @@ M.setup = function(opts)
               local fc = io.open(config.themecfg, "r")
               if fc ~= nil then
                 M.load_conf(fc)
-                config = require("base46.config").get()
                 M.set_background(config.theme.background)
                 config.refresh(config.theme.background)
               end
@@ -108,21 +108,17 @@ M.setup = function(opts)
 
   vim.api.nvim_create_autocmd("BufWinEnter", {
     callback = function()
-      if vim.bo.filetype ~= "preview" then
-        local theme = M.get_theme_by_filetype()
-        M.load_theme(theme)
-      end
+      local theme = M.get_theme_by_filetype()
+      M.load_theme(theme)
     end,
   })
 
-  config = require("base46.config").get()
   M.set_background(config.theme.background)
   require("base46.term")
   config.refresh(config.theme.background)
 end
 
-M.get_theme_by_filetype = function()
-  local config = require("base46.config").get()
+function M.get_theme_by_filetype()
   local name = vim.api.nvim_buf_get_name(0)
   if name == "" and config.current_theme then
     return config.current_theme
@@ -140,18 +136,12 @@ M.get_theme_by_filetype = function()
   return config.theme[background]
 end
 
-M.switch_background = function()
+function M.switch_background()
   local background = "light"
-  local config = require("base46.config").get()
   if config.cur_background == "light" then
     background = "dark"
   end
   M.set_background(background)
-end
-
-M.preview = function()
-  local preview = require("base46.preview")
-  preview.open_themes_list()
 end
 
 return M

@@ -40,16 +40,16 @@ M.default = {
   },
 }
 
-M.get = function()
+function M.get()
   return vim.g.base46_config
 end
 
-M.update = function(opts)
+function M.update(opts)
   vim.g.base46_config = vim.tbl_deep_extend("force", vim.g.base46_config, opts)
   vim.g.base46_cache = vim.g.base46_config.cacheroot
 end
 
-M.init = function(opts)
+function M.init(opts)
   vim.g.base46_config = vim.tbl_deep_extend("force", M.default, opts or {})
   return vim.g.base46_config
 end
