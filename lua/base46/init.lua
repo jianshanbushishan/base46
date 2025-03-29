@@ -48,7 +48,7 @@ function M.LoadTheme(theme)
     M.Compile(theme)
   end
 
-  loadfile(hlFile)
+  loadfile(hlFile)()
 end
 
 local function Save2File(content, filePath)
