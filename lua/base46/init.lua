@@ -26,7 +26,7 @@ local config = {
 local error = vim.log.levels.ERROR
 
 function M.SetBackground(background, force)
-  if config.theme.background == background and not force then
+  if vim.opt.background == background and not force then
     return
   end
 
@@ -38,6 +38,7 @@ function M.SetBackground(background, force)
 
   config.theme.background = background
   vim.opt.background = background
+
   local theme = config.theme[background]
   M.LoadTheme(theme)
   vim.cmd("doautocmd ColorScheme")
@@ -117,7 +118,7 @@ end
 
 function M.SwitchBackground()
   local background = "light"
-  if config.cur_background == "light" then
+  if vim.opt.background == "light" then
     background = "dark"
   end
 
