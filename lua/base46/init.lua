@@ -40,6 +40,7 @@ function M.SetBackground(background, force)
   vim.opt.background = background
   local theme = config.theme[background]
   M.LoadTheme(theme)
+  vim.cmd("doautocmd ColorScheme")
 end
 
 function M.LoadTheme(theme)
@@ -82,6 +83,10 @@ local function SaveThemeConf()
 end
 
 function M.setup(opts)
+  if opts.integrations ~= nil then
+    config.integrations = opts.integrations
+  end
+
   if not LoadThemeConf() then
     SaveThemeConf()
   end
@@ -100,7 +105,6 @@ function M.setup(opts)
               defer = nil
               LoadThemeConf()
               M.SetBackground(config.theme.background, true)
-              opts.refresh(config.theme.background)
             end, 100)
           end
         end,
@@ -109,7 +113,6 @@ function M.setup(opts)
   end
 
   M.SetBackground(config.theme.background, true)
-  opts.refresh(config.theme.background)
 end
 
 function M.SwitchBackground()
@@ -142,17 +145,10 @@ local function GenerateCode(hls, terms)
 
   table.insert(lines, "")
   for idx, color in ipairs(terms) do
-    valStr = string.format("vim.g.terminal_color_%d = '%s'", idx - 1, color)
+    local valStr = string.format("vim.g.terminal_color_%d = '%s'", idx - 1, color)
     table.insert(lines, valStr)
   end
   return table.concat(lines, "\n")
-end
-
-local function CreateTempFile(content)
-  local tempname = os.tmpname()
-
-  Save2File(content, tempname)
-  return tempname
 end
 
 function M.Compile(theme)
@@ -172,26 +168,6 @@ function M.Compile(theme)
   local terms = termsMod.GetHighlight(themeColors)
   local code = GenerateCode(colors, terms)
   Save2File(code, config.cachePath .. theme)
-
-  -- local compileStr = [[
-  -- local error = vim.log.levels.ERROR
-  -- local compiled = string.dump(function()
-  --   %s
-  -- end)
-  --
-  -- local file = io.open("%s%s", "w")
-  -- if not file then
-  --   vim.notify("Compile failed: %s!", error)
-  --   return nil
-  -- end
-  --
-  -- file:write(compiled)
-  -- file:close()
-  -- ]]
-  --
-  -- local compileCode = string.format(compileStr, code, config.cachePath, theme, theme)
-  -- local func = loadstring(compileCode, "=")
-  -- func()
 end
 
 return M
