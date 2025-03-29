@@ -5,7 +5,7 @@ dataPath = string.gsub(dataPath, "\\", "/")
 
 local config = {
   cachePath = dataPath .. "/colorscheme/",
-  themecfg = dataPath .. "/theme.conf",
+  themeCfg = dataPath .. "/theme.conf",
 
   theme = {
     light = "one_light",
@@ -63,7 +63,7 @@ local function Save2File(content, filePath)
 end
 
 local function LoadThemeConf()
-  local file = io.open(config.theme, "r")
+  local file = io.open(config.themeCfg, "r")
   if file == nil then
     return false
   end
@@ -78,7 +78,7 @@ end
 
 local function SaveThemeConf()
   local content = vim.json.encode(config.theme)
-  Save2File(content, config.themecfg)
+  Save2File(content, config.themeCfg)
 end
 
 function M.setup(opts)
@@ -93,7 +93,7 @@ function M.setup(opts)
       vim.notify(msg, error, { title = "base46.nvim" })
     else
       local defer = nil
-      fwatch.watch(config.themecfg, {
+      fwatch.watch(config.themeCfg, {
         on_event = function()
           if not defer then -- only set once in window
             defer = vim.defer_fn(function()
