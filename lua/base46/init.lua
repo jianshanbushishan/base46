@@ -26,7 +26,7 @@ local config = {
 local error = vim.log.levels.ERROR
 
 function M.SetBackground(background, force)
-  if vim.opt.background == background and not force then
+  if vim.opt.background:get() == background and not force then
     return
   end
 
@@ -118,7 +118,7 @@ end
 
 function M.SwitchBackground()
   local background = "light"
-  if vim.opt.background == "light" then
+  if vim.opt.background:get() == "light" then
     background = "dark"
   end
 
@@ -169,6 +169,26 @@ function M.Compile(theme)
   local terms = termsMod.GetHighlight(themeColors)
   local code = GenerateCode(colors, terms)
   Save2File(code, config.cachePath .. theme)
+end
+
+function M.GetThemeList()
+  local themes = {}
+  local files = vim.api.nvim_get_runtime_file("lua/base46/themes/*.lua", true)
+  for _, path in ipairs(files) do
+    local filename = vim.fn.fnamemodify(path, ":t:r")
+    table.insert(themes, filename)
+  end
+  return themes
+end
+
+function M.SetTheme(theme, save)
+  local themeColors = require("base46.themes." .. theme)
+  local background = themeColors.type
+  config.theme[background] = theme
+  M.SetBackground(background, true)
+  if save then
+    SaveThemeConf()
+  end
 end
 
 return M
