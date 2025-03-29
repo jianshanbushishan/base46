@@ -57,8 +57,6 @@ M.base_16 = {
 
 M.type = "light"
 
-M = require("base46.utils").override_theme(M, "oceanic-next-light")
-
 M.polish_hl = {
   statusline = {
     St_NTerminalMode = { fg = M.base_30.white },

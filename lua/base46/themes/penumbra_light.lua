@@ -72,6 +72,4 @@ M.polish_hl = {
 
 M.type = "light"
 
-M = require("base46.utils").override_theme(M, "penumbra_light")
-
 return M

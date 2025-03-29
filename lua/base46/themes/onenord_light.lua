@@ -78,8 +78,6 @@ M.polish_hl = {
   },
 }
 
-M = require("base46.utils").override_theme(M, "onenord_light")
-
 M.type = "light"
 
 return M

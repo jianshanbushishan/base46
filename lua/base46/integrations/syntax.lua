@@ -1,124 +1,123 @@
-local theme = require("base46.utils").get_theme_tb("base_16")
+local M = {}
+function M.GetHighlight(themeColors)
+  local base16 = themeColors.base_16
 
-local syntax = {
-  Boolean = {
-    fg = theme.base09,
-  },
+  local syntax = {
+    Boolean = {
+      fg = base16.base09,
+    },
 
-  Character = {
-    fg = theme.base08,
-  },
+    Character = {
+      fg = base16.base08,
+    },
 
-  Conditional = {
-    fg = theme.base0E,
-  },
+    Conditional = {
+      fg = base16.base0E,
+    },
 
-  Constant = {
-    fg = theme.base08,
-  },
+    Constant = {
+      fg = base16.base08,
+    },
 
-  Define = {
-    fg = theme.base0E,
-    sp = "none",
-  },
+    Define = {
+      fg = base16.base0E,
+      sp = "none",
+    },
 
-  Delimiter = {
-    fg = theme.base0F,
-  },
+    Delimiter = {
+      fg = base16.base0F,
+    },
 
-  Float = {
-    fg = theme.base09,
-  },
+    Float = {
+      fg = base16.base09,
+    },
 
-  Variable = {
-    fg = theme.base05,
-  },
+    Variable = {
+      fg = base16.base05,
+    },
 
-  Function = {
-    fg = theme.base0D,
-  },
+    Function = {
+      fg = base16.base0D,
+    },
 
-  Identifier = {
-    fg = theme.base08,
-    sp = "none",
-  },
+    Identifier = {
+      fg = base16.base08,
+      sp = "none",
+    },
 
-  Include = {
-    fg = theme.base0D,
-  },
+    Include = {
+      fg = base16.base0D,
+    },
 
-  Keyword = {
-    fg = theme.base0E,
-  },
+    Keyword = {
+      fg = base16.base0E,
+    },
 
-  Label = {
-    fg = theme.base0A,
-  },
+    Label = {
+      fg = base16.base0A,
+    },
 
-  Number = {
-    fg = theme.base09,
-  },
+    Number = {
+      fg = base16.base09,
+    },
 
-  Operator = {
-    fg = theme.base05,
-    sp = "none",
-  },
+    Operator = {
+      fg = base16.base05,
+      sp = "none",
+    },
 
-  PreProc = {
-    fg = theme.base0A,
-  },
+    PreProc = {
+      fg = base16.base0A,
+    },
 
-  Repeat = {
-    fg = theme.base0A,
-  },
+    Repeat = {
+      fg = base16.base0A,
+    },
 
-  Special = {
-    fg = theme.base0C,
-  },
+    Special = {
+      fg = base16.base0C,
+    },
 
-  SpecialChar = {
-    fg = theme.base0F,
-  },
+    SpecialChar = {
+      fg = base16.base0F,
+    },
 
-  Statement = {
-    fg = theme.base08,
-  },
+    Statement = {
+      fg = base16.base08,
+    },
 
-  StorageClass = {
-    fg = theme.base0A,
-  },
+    StorageClass = {
+      fg = base16.base0A,
+    },
 
-  String = {
-    fg = theme.base0B,
-  },
+    String = {
+      fg = base16.base0B,
+    },
 
-  Structure = {
-    fg = theme.base0E,
-  },
+    Structure = {
+      fg = base16.base0E,
+    },
 
-  Tag = {
-    fg = theme.base0A,
-  },
+    Tag = {
+      fg = base16.base0A,
+    },
 
-  Todo = {
-    fg = theme.base0A,
-    bg = theme.base01,
-  },
+    Todo = {
+      fg = base16.base0A,
+      bg = base16.base01,
+    },
 
-  Type = {
-    fg = theme.base0A,
-    sp = "none",
-  },
+    Type = {
+      fg = base16.base0A,
+      sp = "none",
+    },
 
-  Typedef = {
-    fg = theme.base0A,
-  },
-}
+    Typedef = {
+      fg = base16.base0A,
+    },
+  }
 
-local merge_tb = require("base46.utils").merge_tb
-
-if vim.version().minor >= 9 then
-  local semantic_hls = {
+  local semantic = {
     ["@lsp.type.class"] = { link = "Structure" },
     ["@lsp.type.decorator"] = { link = "Function" },
     ["@lsp.type.enum"] = { link = "Type" },
@@ -140,7 +139,11 @@ if vim.version().minor >= 9 then
     -- ["@regexp"] = { fg = theme.base0F },
   }
 
-  syntax = merge_tb(syntax, semantic_hls)
+  local treesitter = require("base.integrations.treesitter").GetHighlight(themeColors)
+
+  syntax = vim.tbl_deep_extend("force", syntax, treesitter)
+  syntax = vim.tbl_deep_extend("force", syntax, semantic)
+  return syntax
 end
 
-return merge_tb(syntax, require("base46.utils").load_highlight("treesitter"))
+return M

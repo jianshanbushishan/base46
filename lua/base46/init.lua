@@ -1,13 +1,26 @@
 local M = {}
 
+local dataPath = vim.fn.stdpath("data")
+dataPath = string.gsub(dataPath, "\\", "/")
+
 local config = {
-  cachepath = vim.fn.stdpath("data") .. "/colorscheme/",
-  themecfg = vim.fn.stdpath("data") .. "/theme.conf",
+  cachePath = dataPath .. "/colorscheme/",
+  themecfg = dataPath .. "/theme.conf",
 
   theme = {
     light = "one_light",
     dark = "onedark",
     background = "light",
+  },
+
+  integrations = {
+    "defaults",
+    "treesitter",
+    "devicons",
+    -- "git",
+    -- "syntax",
+    "lsp",
+    "mason",
   },
 }
 local error = vim.log.levels.ERROR
@@ -30,8 +43,23 @@ function M.SetBackground(background, force)
 end
 
 function M.LoadTheme(theme)
-  local hlFile = config.cachepath .. "/" .. theme
-  loadfile(hlFile)()
+  local hlFile = config.cachePath .. "/" .. theme
+  if vim.fn.filereadable(hlFile) ~= 1 then
+    M.Compile(theme)
+  end
+
+  loadfile(hlFile)
+end
+
+local function Save2File(content, filePath)
+  local file = io.open(filePath, "w")
+  if not file then
+    vim.notify(string.format("Cant write file: %s!", filePath), error)
+    return nil
+  end
+
+  file:write(content)
+  file:close()
 end
 
 local function LoadThemeConf()
@@ -49,11 +77,8 @@ local function LoadThemeConf()
 end
 
 local function SaveThemeConf()
-  local file = io.open(config.themecfg, "w")
-  if file ~= nil then
-    file:write(vim.json.encode(config.theme))
-    io.close(file)
-  end
+  local content = vim.json.encode(config.theme)
+  Save2File(content, config.themecfg)
 end
 
 function M.setup(opts)
@@ -96,12 +121,8 @@ function M.SwitchBackground()
   M.SetBackground(background, false)
 end
 
-local function MergeTable(table1, table2)
-  table1 = vim.tbl_deep_extend("force", table1, table2)
-end
-
-local function GenerateCode(hls)
-  local lines = {}
+local function GenerateCode(hls, terms)
+  local lines = { "local sethl = vim.api.nvim_set_hl", "" }
   for hlGroup, hlGroupVals in pairs(hls) do
     local vals = {}
 
@@ -115,40 +136,61 @@ local function GenerateCode(hls)
     end
 
     local valStr = table.concat(vals, ", ")
-    table.insert(lines, string.format("vim.api.nvim_set_hl(0, '%s', { %s })", hlGroup, valStr))
+    local line = string.format("sethl(0, '%s', { %s })", hlGroup, valStr)
+    table.insert(lines, line)
   end
 
+  table.insert(lines, "")
+  for idx, color in ipairs(terms) do
+    valStr = string.format("vim.g.terminal_color_%d = '%s'", idx - 1, color)
+    table.insert(lines, valStr)
+  end
   return table.concat(lines, "\n")
 end
 
-local function create_temp_file(content)
+local function CreateTempFile(content)
   local tempname = os.tmpname()
 
-  local file = io.open(tempname, "w")
-  if not file then
-    vim.notify("Cant creat temp file!", error)
-    return nil
-  end
-
-  file:write(content)
-  file:close()
-
+  Save2File(content, tempname)
   return tempname
 end
 
 function M.Compile(theme)
-  local themeColors = require("base46.themes." .. theme)
+  local themeColors = require("base.themes." .. theme)
 
-  for _, plugin in ipairs(M.config.integrations) do
-    local pluginMod = require("base46.integrations." .. plugin)
+  local colors = {}
+  for _, plugin in ipairs(config.integrations) do
+    local pluginMod = require("base.integrations." .. plugin)
     local hls = pluginMod.GetHighlight(themeColors)
     if themeColors.polish_hl ~= nil and themeColors.polish_hl[plugin] ~= nil then
-      MergeTable(hls, themeColors.polish_hl[plugin])
+      hls = vim.tbl_deep_extend("force", hls, themeColors.polish_hl[plugin])
     end
-
-    local code = GenerateCode(hls)
-    print(create_temp_file(code))
+    colors = vim.tbl_deep_extend("force", colors, hls)
   end
+
+  local termsMod = require("base.term")
+  local terms = termsMod.GetHighlight(themeColors)
+  local code = GenerateCode(colors, terms)
+
+  local compileStr = [[
+  local error = vim.log.levels.ERROR
+  local compiled = string.dump(function()
+    %s
+  end)
+
+  local file = io.open("%s%s", "w")
+  if not file then
+    vim.notify("Compile failed: %s!", error)
+    return nil
+  end
+
+  file:write(compiled)
+  file:close()
+  ]]
+
+  local compileCode = string.format(compileStr, code, config.cachePath, theme, theme)
+  local func = loadstring(compileCode, "=")
+  func()
 end
 
 return M

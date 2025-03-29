@@ -1,48 +1,53 @@
-local colors = require("base46.utils").get_theme_tb("base_30")
+local M = {}
+function M.GetHighlight(themeColors)
+  local base30 = themeColors.base_30
 
-return {
-  NvimTreeEmptyFolderName = { fg = colors.folder_bg },
-  NvimTreeEndOfBuffer = { fg = colors.darker_black },
-  NvimTreeFolderIcon = { fg = colors.folder_bg },
-  NvimTreeFolderName = { fg = colors.folder_bg },
-  NvimTreeFolderArrowOpen = { fg = colors.folder_bg },
-  NvimTreeFolderArrowClosed = { fg = colors.grey_fg },
-  NvimTreeGitDirty = { fg = colors.red },
-  NvimTreeIndentMarker = { fg = colors.grey_fg },
-  NvimTreeNormal = { bg = colors.darker_black },
-  NvimTreeNormalNC = { bg = colors.darker_black },
-  NvimTreeOpenedFolderName = { fg = colors.folder_bg },
-  NvimTreeGitIgnored = { fg = colors.light_grey },
+  return {
+    NvimTreeEmptyFolderName = { fg = base30.folder_bg },
+    NvimTreeEndOfBuffer = { fg = base30.darker_black },
+    NvimTreeFolderIcon = { fg = base30.folder_bg },
+    NvimTreeFolderName = { fg = base30.folder_bg },
+    NvimTreeFolderArrowOpen = { fg = base30.folder_bg },
+    NvimTreeFolderArrowClosed = { fg = base30.grey_fg },
+    NvimTreeGitDirty = { fg = base30.red },
+    NvimTreeIndentMarker = { fg = base30.grey_fg },
+    NvimTreeNormal = { bg = base30.darker_black },
+    NvimTreeNormalNC = { bg = base30.darker_black },
+    NvimTreeOpenedFolderName = { fg = base30.folder_bg },
+    NvimTreeGitIgnored = { fg = base30.light_grey },
 
-  NvimTreeWinSeparator = {
-    fg = colors.darker_black,
-    bg = colors.darker_black,
-  },
+    NvimTreeWinSeparator = {
+      fg = base30.darker_black,
+      bg = base30.darker_black,
+    },
 
-  NvimTreeWindowPicker = {
-    fg = colors.red,
-    bg = colors.black2,
-  },
+    NvimTreeWindowPicker = {
+      fg = base30.red,
+      bg = base30.black2,
+    },
 
-  NvimTreeCursorLine = {
-    bg = colors.black2,
-  },
+    NvimTreeCursorLine = {
+      bg = base30.black2,
+    },
 
-  NvimTreeGitNew = {
-    fg = colors.yellow,
-  },
+    NvimTreeGitNew = {
+      fg = base30.yellow,
+    },
 
-  NvimTreeGitDeleted = {
-    fg = colors.red,
-  },
+    NvimTreeGitDeleted = {
+      fg = base30.red,
+    },
 
-  NvimTreeSpecialFile = {
-    fg = colors.yellow,
-    bold = true,
-  },
+    NvimTreeSpecialFile = {
+      fg = base30.yellow,
+      bold = true,
+    },
 
-  NvimTreeRootFolder = {
-    fg = colors.red,
-    bold = true,
-  },
-}
+    NvimTreeRootFolder = {
+      fg = base30.red,
+      bold = true,
+    },
+  }
+end
+
+return M

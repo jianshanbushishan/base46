@@ -1,252 +1,250 @@
-local utils = require("base46.utils")
-local colors = utils.get_theme_tb("base_30")
-local theme = utils.get_theme_tb("base_16")
+local colorize = require("base.colors").change_hex_lightness
 
-local generate_color = require("base46.colors").change_hex_lightness
+local M = {}
+function M.GetHighlight(themeColors)
+  local base30 = themeColors.base_30
+  local base16 = themeColors.base_16
 
-local defaults = {
-  MatchWord = {
-    bg = colors.grey,
-    fg = colors.white,
-  },
+  return {
+    MatchWord = {
+      bg = base30.grey,
+      fg = base30.white,
+    },
 
-  Pmenu = { bg = colors.one_bg },
-  PmenuSbar = { bg = colors.one_bg },
-  PmenuSel = { bg = colors.pmenu_bg, fg = colors.black },
-  PmenuThumb = { bg = colors.grey },
+    Pmenu = { bg = base30.one_bg },
+    PmenuSbar = { bg = base30.one_bg },
+    PmenuSel = { bg = base30.pmenu_bg, fg = base30.black },
+    PmenuThumb = { bg = base30.grey },
 
-  MatchParen = { link = "MatchWord" },
+    MatchParen = { link = "MatchWord" },
 
-  Comment = { fg = colors.grey_fg, italic = true },
+    Comment = { fg = base30.grey_fg, italic = true },
 
-  CursorLineNr = { fg = colors.white },
-  LineNr = { fg = colors.grey },
+    CursorLineNr = { fg = base30.white },
+    LineNr = { fg = base30.grey },
 
-  -- floating windows
-  FloatBorder = { fg = colors.blue, bg = colors.darker_black },
-  NormalFloat = { bg = colors.darker_black },
+    -- floating windows
+    FloatBorder = { fg = base30.blue, bg = base30.darker_black },
+    NormalFloat = { bg = base30.darker_black },
 
-  SnacksPickerInputTitle = { fg = colors.blue, bg = colors.darker_black },
-  SnacksPickerBoxTitle = { fg = colors.blue, bg = colors.darker_black },
+    SnacksPickerInputTitle = { fg = base30.blue, bg = base30.darker_black },
+    SnacksPickerBoxTitle = { fg = base30.blue, bg = base30.darker_black },
 
-  NvimInternalError = { fg = colors.red },
-  WinSeparator = { fg = colors.line },
+    NvimInternalError = { fg = base30.red },
+    WinSeparator = { fg = base30.line },
 
-  Normal = {
-    fg = theme.base05,
-    bg = theme.base00,
-  },
+    Normal = {
+      fg = base16.base05,
+      bg = base16.base00,
+    },
 
-  Bold = {
-    bold = true,
-  },
+    Bold = {
+      bold = true,
+    },
 
-  Debug = {
-    fg = theme.base08,
-  },
+    Debug = {
+      fg = base16.base08,
+    },
 
-  Directory = {
-    fg = theme.base0D,
-  },
+    Directory = {
+      fg = base16.base0D,
+    },
 
-  Error = {
-    fg = theme.base00,
-    bg = theme.base08,
-  },
+    Error = {
+      fg = base16.base00,
+      bg = base16.base08,
+    },
 
-  ErrorMsg = {
-    fg = theme.base08,
-    bg = theme.base00,
-  },
+    ErrorMsg = {
+      fg = base16.base08,
+      bg = base16.base00,
+    },
 
-  Exception = {
-    fg = theme.base08,
-  },
+    Exception = {
+      fg = base16.base08,
+    },
 
-  FoldColumn = {
-    fg = theme.base0C,
-    bg = theme.base01,
-  },
+    FoldColumn = {
+      fg = base16.base0C,
+      bg = base16.base01,
+    },
 
-  Folded = {
-    fg = colors.light_grey,
-    bg = colors.black2,
-  },
+    Folded = {
+      fg = base30.light_grey,
+      bg = base30.black2,
+    },
 
-  IncSearch = {
-    fg = theme.base01,
-    bg = theme.base09,
-  },
+    IncSearch = {
+      fg = base16.base01,
+      bg = base16.base09,
+    },
 
-  Italic = {
-    italic = true,
-  },
+    Italic = {
+      italic = true,
+    },
 
-  Macro = {
-    fg = theme.base08,
-  },
+    Macro = {
+      fg = base16.base08,
+    },
 
-  ModeMsg = {
-    fg = theme.base0B,
-  },
+    ModeMsg = {
+      fg = base16.base0B,
+    },
 
-  MoreMsg = {
-    fg = theme.base0B,
-  },
+    MoreMsg = {
+      fg = base16.base0B,
+    },
 
-  Question = {
-    fg = theme.base0D,
-  },
+    Question = {
+      fg = base16.base0D,
+    },
 
-  Search = {
-    fg = theme.base01,
-    bg = theme.base0A,
-  },
+    Search = {
+      fg = base16.base01,
+      bg = base16.base0A,
+    },
 
-  Substitute = {
-    fg = theme.base01,
-    bg = theme.base0A,
-    sp = "none",
-  },
+    Substitute = {
+      fg = base16.base01,
+      bg = base16.base0A,
+      sp = "none",
+    },
 
-  SpecialKey = {
-    fg = theme.base03,
-  },
+    SpecialKey = {
+      fg = base16.base03,
+    },
 
-  TooLong = {
-    fg = theme.base08,
-  },
+    TooLong = {
+      fg = base16.base08,
+    },
 
-  UnderLined = {
-    underline = true,
-  },
+    UnderLined = {
+      underline = true,
+    },
 
-  Visual = {
-    bg = theme.base02,
-  },
+    Visual = {
+      bg = base16.base02,
+    },
 
-  VisualNOS = {
-    fg = theme.base08,
-  },
+    VisualNOS = {
+      fg = base16.base08,
+    },
 
-  WarningMsg = {
-    fg = theme.base08,
-  },
+    WarningMsg = {
+      fg = base16.base08,
+    },
 
-  WildMenu = {
-    fg = theme.base08,
-    bg = theme.base0A,
-  },
+    WildMenu = {
+      fg = base16.base08,
+      bg = base16.base0A,
+    },
 
-  Title = {
-    fg = theme.base0D,
-    sp = "none",
-  },
+    Title = {
+      fg = base16.base0D,
+      sp = "none",
+    },
 
-  Conceal = {
-    bg = "NONE",
-  },
+    Conceal = {
+      bg = "NONE",
+    },
 
-  Cursor = {
-    fg = theme.base00,
-    bg = theme.base05,
-  },
+    Cursor = {
+      fg = base16.base00,
+      bg = base16.base05,
+    },
 
-  NonText = {
-    fg = theme.base03,
-  },
+    NonText = {
+      fg = base16.base03,
+    },
 
-  SignColumn = {
-    fg = theme.base03,
-    sp = "NONE",
-  },
+    SignColumn = {
+      fg = base16.base03,
+      sp = "NONE",
+    },
 
-  ColorColumn = {
-    bg = theme.base01,
-    sp = "none",
-  },
+    ColorColumn = {
+      bg = base16.base01,
+      sp = "none",
+    },
 
-  CursorColumn = {
-    bg = theme.base01,
-    sp = "none",
-  },
+    CursorColumn = {
+      bg = base16.base01,
+      sp = "none",
+    },
 
-  CursorLine = {
-    bg = "none",
-    sp = "none",
-  },
+    CursorLine = {
+      bg = "none",
+      sp = "none",
+    },
 
-  QuickFixLine = {
-    bg = theme.base01,
-    sp = "none",
-  },
+    QuickFixLine = {
+      bg = base16.base01,
+      sp = "none",
+    },
 
-  -- spell
-  SpellBad = {
-    undercurl = true,
-    sp = theme.base08,
-  },
+    -- spell
+    SpellBad = {
+      undercurl = true,
+      sp = base16.base08,
+    },
 
-  SpellLocal = {
-    undercurl = true,
-    sp = theme.base0C,
-  },
+    SpellLocal = {
+      undercurl = true,
+      sp = base16.base0C,
+    },
 
-  SpellCap = {
-    undercurl = true,
-    sp = theme.base0D,
-  },
+    SpellCap = {
+      undercurl = true,
+      sp = base16.base0D,
+    },
 
-  SpellRare = {
-    undercurl = true,
-    sp = theme.base0E,
-  },
+    SpellRare = {
+      undercurl = true,
+      sp = base16.base0E,
+    },
 
-  healthSuccess = {
-    bg = colors.green,
-    fg = colors.black,
-  },
+    healthSuccess = {
+      bg = base30.green,
+      fg = base30.black,
+    },
 
-  -- lazy.nvim
-  LazyH1 = {
-    bg = colors.green,
-    fg = colors.black,
-  },
+    -- lazy.nvim
+    LazyH1 = {
+      bg = base30.green,
+      fg = base30.black,
+    },
 
-  LazyButton = {
-    bg = colors.one_bg,
-    fg = generate_color(colors.light_grey, vim.o.bg == "dark" and 10 or -20),
-  },
+    LazyButton = {
+      bg = base30.one_bg,
+      fg = colorize(base30.light_grey, vim.o.bg == "dark" and 10 or -20),
+    },
 
-  LazyH2 = {
-    fg = colors.red,
-    bold = true,
-    underline = true,
-  },
+    LazyH2 = {
+      fg = base30.red,
+      bold = true,
+      underline = true,
+    },
 
-  LazyReasonPlugin = { fg = colors.red },
-  LazyValue = { fg = colors.teal },
-  LazyDir = { fg = theme.base05 },
-  LazyUrl = { fg = theme.base05 },
-  LazyCommit = { fg = colors.green },
-  LazyNoCond = { fg = colors.red },
-  LazySpecial = { fg = colors.blue },
-  LazyReasonFt = { fg = colors.purple },
-  LazyOperator = { fg = colors.white },
-  LazyReasonKeys = { fg = colors.teal },
-  LazyTaskOutput = { fg = colors.white },
-  LazyCommitIssue = { fg = colors.pink },
-  LazyReasonEvent = { fg = colors.yellow },
-  LazyReasonStart = { fg = colors.white },
-  LazyReasonRuntime = { fg = colors.nord_blue },
-  LazyReasonCmd = { fg = colors.sun },
-  LazyReasonSource = { fg = colors.cyan },
-  LazyReasonImport = { fg = colors.white },
-  LazyProgressDone = { fg = colors.green },
-}
+    LazyReasonPlugin = { fg = base30.red },
+    LazyValue = { fg = base30.teal },
+    LazyDir = { fg = base16.base05 },
+    LazyUrl = { fg = base16.base05 },
+    LazyCommit = { fg = base30.green },
+    LazyNoCond = { fg = base30.red },
+    LazySpecial = { fg = base30.blue },
+    LazyReasonFt = { fg = base30.purple },
+    LazyOperator = { fg = base30.white },
+    LazyReasonKeys = { fg = base30.teal },
+    LazyTaskOutput = { fg = base30.white },
+    LazyCommitIssue = { fg = base30.pink },
+    LazyReasonEvent = { fg = base30.yellow },
+    LazyReasonStart = { fg = base30.white },
+    LazyReasonRuntime = { fg = base30.nord_blue },
+    LazyReasonCmd = { fg = base30.sun },
+    LazyReasonSource = { fg = base30.cyan },
+    LazyReasonImport = { fg = base30.white },
+    LazyProgressDone = { fg = base30.green },
+  }
+end
 
--- merge statusilne & hl_add tables!
-local merge_tb = require("base46.utils").merge_tb
-defaults = merge_tb(defaults, require("base46.utils").load_highlight("statusline"))
-
-return defaults
+return M

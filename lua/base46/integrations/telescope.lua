@@ -1,54 +1,39 @@
-local colors = require("base46.utils").get_theme_tb("base_30")
+local M = {}
+function M.GetHighlight(themeColors)
+  local base30 = themeColors.base_30
 
-local telescope_style = "bordered"
+  return {
+    TelescopePromptPrefix = {
+      fg = base30.red,
+      bg = base30.black2,
+    },
 
-local hlgroups = {
+    TelescopeNormal = { bg = base30.darker_black },
 
-  TelescopePromptPrefix = {
-    fg = colors.red,
-    bg = colors.black2,
-  },
+    TelescopePreviewTitle = {
+      fg = base30.black,
+      bg = base30.green,
+    },
 
-  TelescopeNormal = { bg = colors.darker_black },
+    TelescopePromptTitle = {
+      fg = base30.black,
+      bg = base30.red,
+    },
 
-  TelescopePreviewTitle = {
-    fg = colors.black,
-    bg = colors.green,
-  },
+    TelescopeSelection = { bg = base30.black2, fg = base30.white },
+    TelescopeResultsDiffAdd = { fg = base30.green },
+    TelescopeResultsDiffChange = { fg = base30.yellow },
+    TelescopeResultsDiffDelete = { fg = base30.red },
 
-  TelescopePromptTitle = {
-    fg = colors.black,
-    bg = colors.red,
-  },
+    TelescopeMatching = { bg = base30.one_bg, fg = base30.blue },
+    TelescopeBorder = { fg = base30.one_bg3 },
+    TelescopePromptBorder = { fg = base30.one_bg3 },
+    TelescopeResultsTitle = { fg = base30.black, bg = base30.green },
+    -- TelescopePreviewTitle = { fg = base30.black, bg = base30.blue },
+    -- TelescopePromptPrefix = { fg = base30.red, bg = base30.black },
+    -- TelescopeNormal = { bg = base30.black },
+    TelescopePromptNormal = { bg = base30.black },
+  }
+end
 
-  TelescopeSelection = { bg = colors.black2, fg = colors.white },
-  TelescopeResultsDiffAdd = { fg = colors.green },
-  TelescopeResultsDiffChange = { fg = colors.yellow },
-  TelescopeResultsDiffDelete = { fg = colors.red },
-
-  TelescopeMatching = { bg = colors.one_bg, fg = colors.blue },
-}
-
-local styles = {
-  borderless = {
-    TelescopeBorder = { fg = colors.darker_black, bg = colors.darker_black },
-    TelescopePromptBorder = { fg = colors.black2, bg = colors.black2 },
-    TelescopePromptNormal = { fg = colors.white, bg = colors.black2 },
-    TelescopeResultsTitle = { fg = colors.darker_black, bg = colors.darker_black },
-    TelescopePromptPrefix = { fg = colors.red, bg = colors.black2 },
-  },
-
-  bordered = {
-    TelescopeBorder = { fg = colors.one_bg3 },
-    TelescopePromptBorder = { fg = colors.one_bg3 },
-    TelescopeResultsTitle = { fg = colors.black, bg = colors.green },
-    TelescopePreviewTitle = { fg = colors.black, bg = colors.blue },
-    TelescopePromptPrefix = { fg = colors.red, bg = colors.black },
-    TelescopeNormal = { bg = colors.black },
-    TelescopePromptNormal = { bg = colors.black },
-  },
-}
-
-local result = vim.tbl_deep_extend("force", hlgroups, styles[telescope_style])
-
-return result
+return M

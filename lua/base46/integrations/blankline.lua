@@ -1,8 +1,13 @@
-local colors = require("base46.utils").get_theme_tb("base_30")
+local M = {}
+function M.GetHighlight(themeColors)
+  local base30 = themeColors.base_30
 
-return {
-  IndentBlanklineChar = { fg = colors.line },
-  IndentBlanklineSpaceChar = { fg = colors.line },
-  IndentBlanklineContextChar = { fg = colors.grey },
-  IndentBlanklineContextStart = { bg = colors.one_bg2 },
-}
+  return {
+    IndentBlanklineChar = { fg = base30.line },
+    IndentBlanklineSpaceChar = { fg = base30.line },
+    IndentBlanklineContextChar = { fg = base30.grey },
+    IndentBlanklineContextStart = { bg = base30.one_bg2 },
+  }
+end
+
+return M

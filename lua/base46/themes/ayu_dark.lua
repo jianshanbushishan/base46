@@ -66,8 +66,6 @@ M.polish_hl = {
   },
 }
 
-M = require("base46.utils").override_theme(M, "ayu-dark")
-
 M.type = "dark"
 
 return M

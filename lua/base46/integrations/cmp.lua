@@ -1,50 +1,49 @@
-local base16 = require("base46.utils").get_theme_tb("base_16")
-local colors = require("base46.utils").get_theme_tb("base_30")
+local M = {}
+function M.GetHighlight(themeColors)
+  local base30 = themeColors.base_30
+  local base16 = themeColors.base_16
 
-local highlights = {
-  CmpItemAbbr = { fg = colors.white },
-  CmpItemAbbrMatch = { fg = colors.blue, bold = true },
-  CmpDoc = { bg = colors.darker_black },
-  CmpDocBorder = { fg = colors.darker_black, bg = colors.darker_black },
-  CmpPmenu = { bg = colors.black },
-  CmpSel = { link = "PmenuSel", bold = true },
-}
+  return {
+    CmpItemAbbr = { fg = base30.white },
+    CmpItemAbbrMatch = { fg = base30.blue, bold = true },
+    CmpDoc = { bg = base30.darker_black },
+    CmpDocBorder = { fg = base30.darker_black, bg = base30.darker_black },
+    CmpPmenu = { bg = base30.black },
+    CmpSel = { link = "PmenuSel", bold = true },
 
-local item_kinds = {
-  -- cmp item kinds
-  CmpItemKindConstant = { fg = base16.base09 },
-  CmpItemKindFunction = { fg = base16.base0D },
-  CmpItemKindIdentifier = { fg = base16.base08 },
-  CmpItemKindField = { fg = base16.base08 },
-  CmpItemKindVariable = { fg = base16.base0E },
-  CmpItemKindSnippet = { fg = colors.red },
-  CmpItemKindText = { fg = base16.base0B },
-  CmpItemKindStructure = { fg = base16.base0E },
-  CmpItemKindType = { fg = base16.base0A },
-  CmpItemKindKeyword = { fg = base16.base07 },
-  CmpItemKindMethod = { fg = base16.base0D },
-  CmpItemKindConstructor = { fg = colors.blue },
-  CmpItemKindFolder = { fg = base16.base07 },
-  CmpItemKindModule = { fg = base16.base0A },
-  CmpItemKindProperty = { fg = base16.base08 },
-  CmpItemKindEnum = { fg = colors.blue },
-  CmpItemKindUnit = { fg = base16.base0E },
-  CmpItemKindClass = { fg = colors.teal },
-  CmpItemKindFile = { fg = base16.base07 },
-  CmpItemKindInterface = { fg = colors.green },
-  CmpItemKindColor = { fg = colors.white },
-  CmpItemKindReference = { fg = base16.base05 },
-  CmpItemKindEnumMember = { fg = colors.purple },
-  CmpItemKindStruct = { fg = base16.base0E },
-  CmpItemKindValue = { fg = colors.cyan },
-  CmpItemKindEvent = { fg = colors.yellow },
-  CmpItemKindOperator = { fg = base16.base05 },
-  CmpItemKindTypeParameter = { fg = base16.base08 },
-  CmpItemKindCopilot = { fg = colors.green },
-  CmpItemKindCodeium = { fg = colors.vibrant_green },
-  CmpItemKindTabNine = { fg = colors.baby_pink },
-}
+    -- cmp item kinds
+    CmpItemKindConstant = { fg = base16.base09 },
+    CmpItemKindFunction = { fg = base16.base0D },
+    CmpItemKindIdentifier = { fg = base16.base08 },
+    CmpItemKindField = { fg = base16.base08 },
+    CmpItemKindVariable = { fg = base16.base0E },
+    CmpItemKindSnippet = { fg = base30.red },
+    CmpItemKindText = { fg = base16.base0B },
+    CmpItemKindStructure = { fg = base16.base0E },
+    CmpItemKindType = { fg = base16.base0A },
+    CmpItemKindKeyword = { fg = base16.base07 },
+    CmpItemKindMethod = { fg = base16.base0D },
+    CmpItemKindConstructor = { fg = base30.blue },
+    CmpItemKindFolder = { fg = base16.base07 },
+    CmpItemKindModule = { fg = base16.base0A },
+    CmpItemKindProperty = { fg = base16.base08 },
+    CmpItemKindEnum = { fg = base30.blue },
+    CmpItemKindUnit = { fg = base16.base0E },
+    CmpItemKindClass = { fg = base30.teal },
+    CmpItemKindFile = { fg = base16.base07 },
+    CmpItemKindInterface = { fg = base30.green },
+    CmpItemKindColor = { fg = base30.white },
+    CmpItemKindReference = { fg = base16.base05 },
+    CmpItemKindEnumMember = { fg = base30.purple },
+    CmpItemKindStruct = { fg = base16.base0E },
+    CmpItemKindValue = { fg = base30.cyan },
+    CmpItemKindEvent = { fg = base30.yellow },
+    CmpItemKindOperator = { fg = base16.base05 },
+    CmpItemKindTypeParameter = { fg = base16.base08 },
+    CmpItemKindCopilot = { fg = base30.green },
+    CmpItemKindCodeium = { fg = base30.vibrant_green },
+    CmpItemKindTabNine = { fg = base30.baby_pink },
+  }
+end
 
-highlights = vim.tbl_deep_extend("force", highlights, item_kinds)
-
-return highlights
+return M

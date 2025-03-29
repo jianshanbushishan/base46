@@ -1,77 +1,82 @@
-local colors = require("base46.utils").get_theme_tb("base_30")
+local M = {}
 
-return {
+function M.GetHighlight(themeColors)
+  local base30 = themeColors.base_30
 
-  TblineFill = {
-    bg = colors.black2,
-  },
+  return {
+    TblineFill = {
+      bg = base30.black2,
+    },
 
-  TbLineBufOn = {
-    fg = colors.white,
-    bg = colors.black,
-  },
+    TbLineBufOn = {
+      fg = base30.white,
+      bg = base30.black,
+    },
 
-  TbLineBufOff = {
-    fg = colors.light_grey,
-    bg = colors.black2,
-  },
+    TbLineBufOff = {
+      fg = base30.light_grey,
+      bg = base30.black2,
+    },
 
-  TbLineBufOnModified = {
-    fg = colors.green,
-    bg = colors.black,
-  },
+    TbLineBufOnModified = {
+      fg = base30.green,
+      bg = base30.black,
+    },
 
-  TbBufLineBufOffModified = {
-    fg = colors.red,
-    bg = colors.black2,
-  },
+    TbBufLineBufOffModified = {
+      fg = base30.red,
+      bg = base30.black2,
+    },
 
-  TbLineBufOnClose = {
-    fg = colors.red,
-    bg = colors.black,
-  },
+    TbLineBufOnClose = {
+      fg = base30.red,
+      bg = base30.black,
+    },
 
-  TbLineBufOffClose = {
-    fg = colors.light_grey,
-    bg = colors.black2,
-  },
+    TbLineBufOffClose = {
+      fg = base30.light_grey,
+      bg = base30.black2,
+    },
 
-  TblineTabNewBtn = {
-    fg = colors.white,
-    bg = colors.one_bg3,
-    bold = true,
-  },
+    TblineTabNewBtn = {
+      fg = base30.white,
+      bg = base30.one_bg3,
+      bold = true,
+    },
 
-  TbLineTabOn = {
-    fg = colors.black,
-    bg = colors.nord_blue,
-    bold = true,
-  },
+    TbLineTabOn = {
+      fg = base30.black,
+      bg = base30.nord_blue,
+      bold = true,
+    },
 
-  TbLineTabOff = {
-    fg = colors.white,
-    bg = colors.one_bg2,
-  },
+    TbLineTabOff = {
+      fg = base30.white,
+      bg = base30.one_bg2,
+    },
 
-  TbLineTabCloseBtn = {
-    fg = colors.black,
-    bg = colors.nord_blue,
-  },
+    TbLineTabCloseBtn = {
+      fg = base30.black,
+      bg = base30.nord_blue,
+    },
 
-  TBTabTitle = {
-    fg = colors.black,
-    bg = colors.white,
-  },
+    TBTabTitle = {
+      fg = base30.black,
+      bg = base30.white,
+    },
 
-  TbLineThemeToggleBtn = {
-    bold = true,
-    fg = colors.white,
-    bg = colors.one_bg3,
-  },
+    TbLineThemeToggleBtn = {
+      bold = true,
+      fg = base30.white,
+      bg = base30.one_bg3,
+    },
 
-  TbLineCloseAllBufsBtn = {
-    bold = true,
-    bg = colors.red,
-    fg = colors.black,
-  },
-}
+    TbLineCloseAllBufsBtn = {
+      bold = true,
+      bg = base30.red,
+      fg = base30.black,
+    },
+  }
+end
+
+return M

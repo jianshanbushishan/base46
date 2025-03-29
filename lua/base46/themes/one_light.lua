@@ -84,6 +84,4 @@ M.polish_hl = {
   statusline = { St_pos_text = { fg = M.base_30.white } },
 }
 
-M = require("base46.utils").override_theme(M, "one_light")
-
 return M

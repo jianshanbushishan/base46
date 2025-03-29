@@ -1,111 +1,115 @@
-local theme = require("base46.utils").get_theme_tb("base_16")
-local colors = require("base46.utils").get_theme_tb("base_30")
+local M = {}
+function M.GetHighlight(themeColors)
+  local base30 = themeColors.base_30
+  local base16 = themeColors.base_16
 
-return {
+  return {
+    diffOldFile = {
+      fg = base30.baby_pink,
+    },
 
-  diffOldFile = {
-    fg = colors.baby_pink,
-  },
+    diffNewFile = {
+      fg = base30.blue,
+    },
 
-  diffNewFile = {
-    fg = colors.blue,
-  },
+    DiffAdd = {
+      fg = base30.blue,
+    },
 
-  DiffAdd = {
-    fg = colors.blue,
-  },
+    DiffAdded = {
+      fg = base30.green,
+    },
 
-  DiffAdded = {
-    fg = colors.green,
-  },
+    DiffChange = {
+      fg = base30.light_grey,
+    },
 
-  DiffChange = {
-    fg = colors.light_grey,
-  },
+    DiffChangeDelete = {
+      fg = base30.red,
+    },
 
-  DiffChangeDelete = {
-    fg = colors.red,
-  },
+    DiffModified = {
+      fg = base30.orange,
+    },
 
-  DiffModified = {
-    fg = colors.orange,
-  },
+    DiffDelete = {
+      fg = base30.red,
+    },
 
-  DiffDelete = {
-    fg = colors.red,
-  },
+    DiffRemoved = {
+      fg = base30.red,
+    },
 
-  DiffRemoved = {
-    fg = colors.red,
-  },
+    DiffText = {
+      fg = base30.white,
+      bg = base30.black2,
+    },
 
-  DiffText = {
-    fg = colors.white,
-    bg = colors.black2,
-  },
+    -- git commits
+    gitcommitOverflow = {
+      fg = base16.base08,
+    },
 
-  -- git commits
-  gitcommitOverflow = {
-    fg = theme.base08,
-  },
+    gitcommitSummary = {
+      fg = base16.base0B,
+    },
 
-  gitcommitSummary = {
-    fg = theme.base0B,
-  },
+    gitcommitComment = {
+      fg = base16.base03,
+    },
 
-  gitcommitComment = {
-    fg = theme.base03,
-  },
+    gitcommitUntracked = {
+      fg = base16.base03,
+    },
 
-  gitcommitUntracked = {
-    fg = theme.base03,
-  },
+    gitcommitDiscarded = {
+      fg = base16.base03,
+    },
 
-  gitcommitDiscarded = {
-    fg = theme.base03,
-  },
+    gitcommitSelected = {
+      fg = base16.base03,
+    },
 
-  gitcommitSelected = {
-    fg = theme.base03,
-  },
+    gitcommitHeader = {
+      fg = base16.base0E,
+    },
 
-  gitcommitHeader = {
-    fg = theme.base0E,
-  },
+    gitcommitSelectedType = {
+      fg = base16.base0D,
+    },
 
-  gitcommitSelectedType = {
-    fg = theme.base0D,
-  },
+    gitcommitUnmergedType = {
+      fg = base16.base0D,
+    },
 
-  gitcommitUnmergedType = {
-    fg = theme.base0D,
-  },
+    gitcommitDiscardedType = {
+      fg = base16.base0D,
+    },
 
-  gitcommitDiscardedType = {
-    fg = theme.base0D,
-  },
+    gitcommitBranch = {
+      fg = base16.base09,
+      bold = true,
+    },
 
-  gitcommitBranch = {
-    fg = theme.base09,
-    bold = true,
-  },
+    gitcommitUntrackedFile = {
+      fg = base16.base0A,
+    },
 
-  gitcommitUntrackedFile = {
-    fg = theme.base0A,
-  },
+    gitcommitUnmergedFile = {
+      fg = base16.base08,
+      bold = true,
+    },
 
-  gitcommitUnmergedFile = {
-    fg = theme.base08,
-    bold = true,
-  },
+    gitcommitDiscardedFile = {
+      fg = base16.base08,
+      bold = true,
+    },
 
-  gitcommitDiscardedFile = {
-    fg = theme.base08,
-    bold = true,
-  },
+    gitcommitSelectedFile = {
+      fg = base16.base0B,
+      bold = true,
+    },
+  }
+end
 
-  gitcommitSelectedFile = {
-    fg = theme.base0B,
-    bold = true,
-  },
-}
+return M

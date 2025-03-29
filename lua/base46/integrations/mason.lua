@@ -1,11 +1,16 @@
-local colors = require("base46.utils").get_theme_tb("base_30")
+local M = {}
+function M.GetHighlight(themeColors)
+  local base30 = themeColors.base_30
 
-return {
-  MasonHeader = { bg = colors.red, fg = colors.black },
-  MasonHighlight = { fg = colors.blue },
-  MasonHighlightBlock = { fg = colors.black, bg = colors.green },
-  MasonHighlightBlockBold = { link = "MasonHighlightBlock" },
-  MasonHeaderSecondary = { link = "MasonHighlightBlock" },
-  MasonMuted = { fg = colors.light_grey },
-  MasonMutedBlock = { fg = colors.light_grey, bg = colors.one_bg },
-}
+  return {
+    MasonHeader = { bg = base30.red, fg = base30.black },
+    MasonHighlight = { fg = base30.blue },
+    MasonHighlightBlock = { fg = base30.black, bg = base30.green },
+    MasonHighlightBlockBold = { link = "MasonHighlightBlock" },
+    MasonHeaderSecondary = { link = "MasonHighlightBlock" },
+    MasonMuted = { fg = base30.light_grey },
+    MasonMutedBlock = { fg = base30.light_grey, bg = base30.one_bg },
+  }
+end
+
+return M
