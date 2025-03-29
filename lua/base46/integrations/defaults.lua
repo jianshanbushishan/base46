@@ -1,4 +1,4 @@
-local colorize = require("base.colors").change_hex_lightness
+local colorize = require("base46.colors").change_hex_lightness
 
 local M = {}
 function M.GetHighlight(themeColors)

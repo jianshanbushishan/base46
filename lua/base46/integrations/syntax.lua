@@ -139,7 +139,7 @@ function M.GetHighlight(themeColors)
     -- ["@regexp"] = { fg = theme.base0F },
   }
 
-  local treesitter = require("base.integrations.treesitter").GetHighlight(themeColors)
+  local treesitter = require("base46.integrations.treesitter").GetHighlight(themeColors)
 
   syntax = vim.tbl_deep_extend("force", syntax, treesitter)
   syntax = vim.tbl_deep_extend("force", syntax, semantic)

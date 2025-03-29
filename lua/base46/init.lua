@@ -156,11 +156,11 @@ local function CreateTempFile(content)
 end
 
 function M.Compile(theme)
-  local themeColors = require("base.themes." .. theme)
+  local themeColors = require("base46.themes." .. theme)
 
   local colors = {}
   for _, plugin in ipairs(config.integrations) do
-    local pluginMod = require("base.integrations." .. plugin)
+    local pluginMod = require("base46.integrations." .. plugin)
     local hls = pluginMod.GetHighlight(themeColors)
     if themeColors.polish_hl ~= nil and themeColors.polish_hl[plugin] ~= nil then
       hls = vim.tbl_deep_extend("force", hls, themeColors.polish_hl[plugin])
@@ -168,29 +168,30 @@ function M.Compile(theme)
     colors = vim.tbl_deep_extend("force", colors, hls)
   end
 
-  local termsMod = require("base.term")
+  local termsMod = require("base46.term")
   local terms = termsMod.GetHighlight(themeColors)
   local code = GenerateCode(colors, terms)
+  Save2File(code, config.cachePath .. theme)
 
-  local compileStr = [[
-  local error = vim.log.levels.ERROR
-  local compiled = string.dump(function()
-    %s
-  end)
-
-  local file = io.open("%s%s", "w")
-  if not file then
-    vim.notify("Compile failed: %s!", error)
-    return nil
-  end
-
-  file:write(compiled)
-  file:close()
-  ]]
-
-  local compileCode = string.format(compileStr, code, config.cachePath, theme, theme)
-  local func = loadstring(compileCode, "=")
-  func()
+  -- local compileStr = [[
+  -- local error = vim.log.levels.ERROR
+  -- local compiled = string.dump(function()
+  --   %s
+  -- end)
+  --
+  -- local file = io.open("%s%s", "w")
+  -- if not file then
+  --   vim.notify("Compile failed: %s!", error)
+  --   return nil
+  -- end
+  --
+  -- file:write(compiled)
+  -- file:close()
+  -- ]]
+  --
+  -- local compileCode = string.format(compileStr, code, config.cachePath, theme, theme)
+  -- local func = loadstring(compileCode, "=")
+  -- func()
 end
 
 return M
