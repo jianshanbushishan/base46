@@ -48,11 +48,7 @@ function M.LoadTheme(theme)
     M.Compile(theme)
   end
 
-  loadfile(hlFile)()
-
-  local themeColors = require("base.themes." .. theme)
-  local termsMod = require("base.term")
-  termsMod.SetHighlight(themeColors)
+  loadfile(hlFile)
 end
 
 local function Save2File(content, filePath)
@@ -125,7 +121,7 @@ function M.SwitchBackground()
   M.SetBackground(background, false)
 end
 
-local function GenerateCode(hls)
+local function GenerateCode(hls, terms)
   local lines = { "local sethl = vim.api.nvim_set_hl", "" }
   for hlGroup, hlGroupVals in pairs(hls) do
     local vals = {}
@@ -144,6 +140,11 @@ local function GenerateCode(hls)
     table.insert(lines, line)
   end
 
+  table.insert(lines, "")
+  for idx, color in ipairs(terms) do
+    valStr = string.format("vim.g.terminal_color_%d = '%s'", idx - 1, color)
+    table.insert(lines, valStr)
+  end
   return table.concat(lines, "\n")
 end
 
@@ -167,7 +168,9 @@ function M.Compile(theme)
     colors = vim.tbl_deep_extend("force", colors, hls)
   end
 
-  local code = GenerateCode(colors)
+  local termsMod = require("base.term")
+  local terms = termsMod.GetHighlight(themeColors)
+  local code = GenerateCode(colors, terms)
 
   local compileStr = [[
   local error = vim.log.levels.ERROR
