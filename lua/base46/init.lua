@@ -3,7 +3,7 @@ local M = {}
 local dataPath = vim.fn.stdpath("data")
 dataPath = string.gsub(dataPath, "\\", "/")
 
-local config = {
+local defaultCfg = {
   cachePath = dataPath .. "/colorscheme/",
   themeCfg = dataPath .. "/theme.conf",
 
@@ -36,16 +36,16 @@ function M.SetBackground(background, force)
     background = "light"
   end
 
-  config.theme.background = background
+  vim.g.base46Cfg.theme.background = background
   vim.opt.background = background
 
-  local theme = config.theme[background]
+  local theme = vim.g.base46Cfg.theme[background]
   M.LoadTheme(theme)
   vim.cmd("doautocmd ColorScheme")
 end
 
 function M.LoadTheme(theme)
-  local hlFile = config.cachePath .. "/" .. theme
+  local hlFile = vim.g.base46Cfg.cachePath .. "/" .. theme
   if vim.fn.filereadable(hlFile) ~= 1 then
     M.Compile(theme)
   end
@@ -65,7 +65,7 @@ local function Save2File(content, filePath)
 end
 
 local function LoadThemeConf()
-  local file = io.open(config.themeCfg, "r")
+  local file = io.open(vim.g.base46Cfg.themeCfg, "r")
   if file == nil then
     return false
   end
@@ -73,19 +73,20 @@ local function LoadThemeConf()
   local content = file:read("*a")
   local opts = vim.json.decode(content)
   io.close(file)
-  config.theme = opts
+  vim.g.base46Cfg.theme = opts
 
   return true
 end
 
 local function SaveThemeConf()
-  local content = vim.json.encode(config.theme)
-  Save2File(content, config.themeCfg)
+  local content = vim.json.encode(vim.g.base46Cfg.theme)
+  Save2File(content, vim.g.base46Cfg.themeCfg)
 end
 
 function M.setup(opts)
+  vim.g.base46Cfg = vim.tbl_deep_extend("force", defaultCfg, opts)
   if opts.integrations ~= nil then
-    config.integrations = opts.integrations
+    vim.g.base46Cfg.integrations = opts.integrations
   end
 
   if not LoadThemeConf() then
@@ -99,13 +100,13 @@ function M.setup(opts)
       vim.notify(msg, error, { title = "base46.nvim" })
     else
       local defer = nil
-      fwatch.watch(config.themeCfg, {
+      fwatch.watch(vim.g.base46Cfg.themeCfg, {
         on_event = function()
           if not defer then -- only set once in window
             defer = vim.defer_fn(function()
               defer = nil
               LoadThemeConf()
-              M.SetBackground(config.theme.background, true)
+              M.SetBackground(vim.g.base46Cfg.theme.background, true)
             end, 100)
           end
         end,
@@ -113,7 +114,7 @@ function M.setup(opts)
     end
   end
 
-  M.SetBackground(config.theme.background, true)
+  M.SetBackground(vim.g.base46Cfg.theme.background, true)
 end
 
 function M.SwitchBackground()
@@ -156,7 +157,7 @@ function M.Compile(theme)
   local themeColors = require("base46.themes." .. theme)
 
   local colors = {}
-  for _, plugin in ipairs(config.integrations) do
+  for _, plugin in ipairs(vim.g.base46Cfg.integrations) do
     local pluginMod = require("base46.integrations." .. plugin)
     local hls = pluginMod.GetHighlight(themeColors)
     if themeColors.polish_hl ~= nil and themeColors.polish_hl[plugin] ~= nil then
@@ -168,15 +169,18 @@ function M.Compile(theme)
   local termsMod = require("base46.term")
   local terms = termsMod.GetHighlight(themeColors)
   local code = GenerateCode(colors, terms)
-  Save2File(code, config.cachePath .. theme)
+  Save2File(code, vim.g.base46Cfg.cachePath .. theme)
 end
 
 function M.GetThemeList()
   local themes = {}
   local files = vim.api.nvim_get_runtime_file("lua/base46/themes/*.lua", true)
   for _, path in ipairs(files) do
-    local filename = vim.fn.fnamemodify(path, ":t:r")
-    table.insert(themes, filename)
+    local theme = {}
+    theme.name = vim.fn.fnamemodify(path, ":t:r")
+    local themeColors = require("base46.themes." .. theme.name)
+    theme.type = themeColors.type
+    table.insert(themes, theme)
   end
   return themes
 end
@@ -184,7 +188,7 @@ end
 function M.SetTheme(theme, save)
   local themeColors = require("base46.themes." .. theme)
   local background = themeColors.type
-  config.theme[background] = theme
+  vim.g.base46Cfg.theme[background] = theme
   M.SetBackground(background, true)
   if save then
     SaveThemeConf()
