@@ -2,6 +2,20 @@ local M = {}
 function M.GetHighlight(themeColors)
   local base30 = themeColors.base_30
   local base16 = themeColors.base_16
+  local isLight = themeColors.type == "light"
+
+  local bgs = {}
+  if isLight == "light" then
+    bgs["DiffAdd"] = "#C2DFDF"
+    bgs["DiffText"] = "#FAFEBD"
+    bgs["DiffChange"] = "#E0F1FF"
+    bgs["DiffDelete"] = "#FFE4E1"
+  else
+    bgs["DiffAdd"] = "#4c5b2b"
+    bgs["DiffText"] = "#33406a"
+    bgs["DiffChange"] = "#4c5b2b"
+    bgs["DiffDelete"] = "#4c1919"
+  end
 
   return {
     diffOldFile = {
@@ -14,6 +28,7 @@ function M.GetHighlight(themeColors)
 
     DiffAdd = {
       fg = base30.blue,
+      bg = bgs["DiffAdd"],
     },
 
     DiffAdded = {
@@ -22,6 +37,7 @@ function M.GetHighlight(themeColors)
 
     DiffChange = {
       fg = base30.light_grey,
+      bg = bgs["DiffChange"],
     },
 
     DiffChangeDelete = {
@@ -34,6 +50,7 @@ function M.GetHighlight(themeColors)
 
     DiffDelete = {
       fg = base30.red,
+      bg = bgs["DiffDelete"],
     },
 
     DiffRemoved = {
@@ -42,7 +59,7 @@ function M.GetHighlight(themeColors)
 
     DiffText = {
       fg = base30.white,
-      bg = base30.black2,
+      bg = bgs["DiffText"],
     },
 
     -- git commits
