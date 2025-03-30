@@ -197,7 +197,8 @@ function M.SetTheme(theme, save)
 end
 
 function M.GetCurrentTheme()
-  return vim.g.base46Cfg.theme.background
+  local background = vim.g.base46Cfg.theme.background
+  return vim.g.base46Cfg.theme[background]
 end
 
 function M.ResetTheme()
