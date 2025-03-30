@@ -24,6 +24,9 @@ local defaultCfg = {
   },
 }
 local error = vim.log.levels.ERROR
+local function ChangeConfig(cfg)
+  vim.g.base46Cfg = vim.tbl_deep_extend("force", vim.g.base46Cfg, cfg)
+end
 
 function M.SetBackground(background, force)
   if vim.opt.background:get() == background and not force then
@@ -36,7 +39,7 @@ function M.SetBackground(background, force)
     background = "light"
   end
 
-  vim.g.base46Cfg.theme.background = background
+  ChangeConfig({ theme = { background = background } })
   vim.opt.background = background
 
   local theme = vim.g.base46Cfg.theme[background]
@@ -73,7 +76,8 @@ local function LoadThemeConf()
   local content = file:read("*a")
   local opts = vim.json.decode(content)
   io.close(file)
-  vim.g.base46Cfg.theme = opts
+
+  ChangeConfig({ theme = opts })
 
   return true
 end
@@ -85,9 +89,6 @@ end
 
 function M.setup(opts)
   vim.g.base46Cfg = vim.tbl_deep_extend("force", defaultCfg, opts)
-  if opts.integrations ~= nil then
-    vim.g.base46Cfg.integrations = opts.integrations
-  end
 
   if not LoadThemeConf() then
     SaveThemeConf()
@@ -188,7 +189,7 @@ end
 function M.SetTheme(theme, save)
   local themeColors = require("base46.themes." .. theme)
   local background = themeColors.type
-  vim.g.base46Cfg.theme[background] = theme
+  ChangeConfig({ theme = { [background] = theme } })
   M.SetBackground(background, true)
   if save then
     SaveThemeConf()
