@@ -14,7 +14,7 @@ function M.GetHighlight(themeColors)
     bgs["DiffAdd"] = "#4c5b2b"
     bgs["DiffText"] = "#33406a"
     bgs["DiffChange"] = "#4c5b2b"
-    bgs["DiffDelete"] = "#4c1919"
+    bgs["DiffDelete"] = "#4c1918"
   end
 
   return {
@@ -27,7 +27,7 @@ function M.GetHighlight(themeColors)
     },
 
     DiffAdd = {
-      fg = base30.blue,
+      -- fg = base30.blue,
       bg = bgs["DiffAdd"],
     },
 
@@ -36,7 +36,7 @@ function M.GetHighlight(themeColors)
     },
 
     DiffChange = {
-      fg = base30.light_grey,
+      -- fg = base30.light_grey,
       bg = bgs["DiffChange"],
     },
 
@@ -49,7 +49,7 @@ function M.GetHighlight(themeColors)
     },
 
     DiffDelete = {
-      fg = base30.red,
+      -- fg = base30.red,
       bg = bgs["DiffDelete"],
     },
 
@@ -58,7 +58,7 @@ function M.GetHighlight(themeColors)
     },
 
     DiffText = {
-      fg = base30.white,
+      -- fg = base30.white,
       bg = bgs["DiffText"],
     },
 
