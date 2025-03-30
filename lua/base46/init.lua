@@ -204,7 +204,7 @@ end
 
 function M.ResetTheme()
   LoadThemeConf()
-  M.SetBackground(vim.g.base46Cfg.theme.background, false)
+  M.SetBackground(vim.g.base46Cfg.theme.background, true)
 end
 
 return M
