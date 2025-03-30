@@ -42,6 +42,7 @@ function M.SetBackground(background, force)
   ChangeConfig({ theme = { background = background } })
   vim.opt.background = background
 
+  vim.cmd("highlight clear")
   local theme = vim.g.base46Cfg.theme[background]
   M.LoadTheme(theme)
   vim.cmd("doautocmd ColorScheme")
