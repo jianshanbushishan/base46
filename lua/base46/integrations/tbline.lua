@@ -4,78 +4,22 @@ function M.GetHighlight(themeColors)
   local base30 = themeColors.base_30
 
   return {
-    TblineFill = {
-      bg = base30.black2,
-    },
+    Tabline = { bg = base30.black2 },
+    TbFill = { bg = base30.black2 },
+    TbBufOn = { fg = base30.white, bg = base30.black },
+    TbBufOff = { fg = base30.light_grey, bg = base30.black2 },
 
-    TbLineBufOn = {
-      fg = base30.white,
-      bg = base30.black,
-    },
-
-    TbLineBufOff = {
-      fg = base30.light_grey,
-      bg = base30.black2,
-    },
-
-    TbLineBufOnModified = {
-      fg = base30.green,
-      bg = base30.black,
-    },
-
-    TbBufLineBufOffModified = {
-      fg = base30.red,
-      bg = base30.black2,
-    },
-
-    TbLineBufOnClose = {
-      fg = base30.red,
-      bg = base30.black,
-    },
-
-    TbLineBufOffClose = {
-      fg = base30.light_grey,
-      bg = base30.black2,
-    },
-
-    TblineTabNewBtn = {
-      fg = base30.white,
-      bg = base30.one_bg3,
-      bold = true,
-    },
-
-    TbLineTabOn = {
-      fg = base30.black,
-      bg = base30.nord_blue,
-      bold = true,
-    },
-
-    TbLineTabOff = {
-      fg = base30.white,
-      bg = base30.one_bg2,
-    },
-
-    TbLineTabCloseBtn = {
-      fg = base30.black,
-      bg = base30.nord_blue,
-    },
-
-    TBTabTitle = {
-      fg = base30.black,
-      bg = base30.white,
-    },
-
-    TbLineThemeToggleBtn = {
-      bold = true,
-      fg = base30.white,
-      bg = base30.one_bg3,
-    },
-
-    TbLineCloseAllBufsBtn = {
-      bold = true,
-      bg = base30.red,
-      fg = base30.black,
-    },
+    TbBufOnModified = { fg = base30.green, bg = base30.black },
+    TbBufOffModified = { fg = base30.red, bg = base30.black2 },
+    TbBufOnClose = { fg = base30.red, bg = base30.black },
+    TbBufOffClose = { fg = base30.light_grey, bg = base30.black2 },
+    TbTabNewBtn = { fg = base30.white, bg = base30.one_bg2 },
+    TbTabOn = { fg = base30.red },
+    TbTabOff = { fg = base30.white, bg = base30.black2 },
+    TbTabCloseBtn = { fg = base30.black, bg = base30.nord_blue },
+    TBTabTitle = { fg = base30.black, bg = base30.blue },
+    TbThemeToggleBtn = { bold = true, fg = base30.white, bg = base30.one_bg3 },
+    TbCloseAllBufsBtn = { bold = true, bg = base30.red, fg = base30.black },
   }
 end
 
