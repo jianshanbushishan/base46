@@ -72,10 +72,6 @@ M.polish_hl = {
     Pmenu = { bg = M.base_30.black2 },
   },
 
-  git = {
-    DiffAdd = { fg = M.base_16.base05 },
-  },
-
   tbline = {
     TbLineThemeToggleBtn = { bg = M.base_30.one_bg3 },
   },

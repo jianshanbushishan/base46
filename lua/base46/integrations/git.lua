@@ -5,7 +5,7 @@ function M.GetHighlight(themeColors)
   local isLight = themeColors.type == "light"
 
   local bgs = {}
-  if isLight == "light" then
+  if isLight then
     bgs["DiffAdd"] = "#C2DFDF"
     bgs["DiffText"] = "#FAFEBD"
     bgs["DiffChange"] = "#E0F1FF"
@@ -27,7 +27,6 @@ function M.GetHighlight(themeColors)
     },
 
     DiffAdd = {
-      -- fg = base30.blue,
       bg = bgs["DiffAdd"],
     },
 

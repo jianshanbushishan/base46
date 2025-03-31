@@ -72,10 +72,6 @@ M.polish_hl = {
   statusline = {
     St_pos_text = { fg = M.base_30.white },
   },
-
-  git = {
-    DiffAdd = { fg = M.base_16.base05 },
-  },
 }
 
 M.type = "light"

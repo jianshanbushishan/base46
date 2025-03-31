@@ -6,6 +6,7 @@ dataPath = string.gsub(dataPath, "\\", "/")
 local defaultCfg = {
   cachePath = dataPath .. "/colorscheme/",
   themeCfg = dataPath .. "/theme.conf",
+  themeList = dataPath .. "/colorscheme/theme.list",
 
   theme = {
     light = "one_light",
@@ -68,31 +69,41 @@ local function Save2File(content, filePath)
   file:close()
 end
 
-local function LoadThemeConf()
-  local file = io.open(vim.g.base46Cfg.themeCfg, "r")
+local function LoadFile2Json(filePath)
+  local file = io.open(filePath, "r")
   if file == nil then
-    return false
+    return {}
   end
 
   local content = file:read("*a")
-  local opts = vim.json.decode(content)
+  local obj = vim.json.decode(content)
   io.close(file)
 
+  return obj
+end
+
+local function LoadThemeConf()
+  local themeConf = vim.g.base46Cfg.themeCfg
+  if vim.fn.filereadable(themeConf) ~= 1 then
+    return false
+  end
+
+  local opts = LoadFile2Json(themeConf)
   ChangeConfig({ theme = opts })
 
   return true
 end
 
-local function SaveThemeConf()
-  local content = vim.json.encode(vim.g.base46Cfg.theme)
-  Save2File(content, vim.g.base46Cfg.themeCfg)
+local function SaveJson2File(obj, filePath)
+  local content = vim.json.encode(obj)
+  Save2File(content, filePath)
 end
 
 function M.setup(opts)
   vim.g.base46Cfg = vim.tbl_deep_extend("force", defaultCfg, opts)
 
   if not LoadThemeConf() then
-    SaveThemeConf()
+    SaveJson2File(vim.g.base46Cfg.theme, vim.g.base46Cfg.themeCfg)
   end
 
   if opts.autoswitch then
@@ -176,14 +187,22 @@ end
 
 function M.GetThemeList()
   local themes = {}
-  local files = vim.api.nvim_get_runtime_file("lua/base46/themes/*.lua", true)
-  for _, path in ipairs(files) do
-    local theme = {}
-    theme.name = vim.fn.fnamemodify(path, ":t:r")
-    local themeColors = require("base46.themes." .. theme.name)
-    theme.type = themeColors.type
-    table.insert(themes, theme)
+  local themeList = vim.g.base46Cfg.themeList
+
+  if vim.fn.filereadable(themeList) == 1 then
+    themes = LoadFile2Json(themeList)
+  else
+    local files = vim.api.nvim_get_runtime_file("lua/base46/themes/*.lua", true)
+    for _, path in ipairs(files) do
+      local theme = {}
+      theme.name = vim.fn.fnamemodify(path, ":t:r")
+      local themeColors = require("base46.themes." .. theme.name)
+      theme.type = themeColors.type
+      table.insert(themes, theme)
+    end
+    SaveJson2File(themes, themeList)
   end
+
   return themes
 end
 
@@ -193,7 +212,7 @@ function M.SetTheme(theme, save)
   ChangeConfig({ theme = { [background] = theme } })
   M.SetBackground(background, true)
   if save then
-    SaveThemeConf()
+    SaveJson2File(vim.g.base46Cfg.theme, vim.g.base46Cfg.themeCfg)
   end
 end
 
