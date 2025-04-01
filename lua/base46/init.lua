@@ -255,7 +255,7 @@ function M.Preview()
 
   local current = M.GetCurrentTheme()
   local showed = false
-  snacks().picker({
+  snacks.picker({
     items = items,
     title = "Themes",
     format = function(item)
