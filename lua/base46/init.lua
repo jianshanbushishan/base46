@@ -226,4 +226,77 @@ function M.ResetTheme()
   M.SetBackground(vim.g.base46Cfg.theme.background, true)
 end
 
+function M.Preview()
+  local themes = M.GetThemeList()
+  local items = {}
+  local longest_name = 1
+  local path = vim.fn.stdpath("data")
+  local previewFile = string.format("%s/lazy/base46/preview.md", path)
+
+  local present, snacks = pcall(require, "snacks")
+  if not present then
+    vim.notify("you need to install snakcs.nvim first", error)
+    return
+  end
+
+  -- 准备 items 数据，并计算最长名称用于格式化
+  for i, theme in ipairs(themes) do
+    table.insert(items, {
+      idx = i,
+      text = string.format("%s (%s)", theme.name, theme.type),
+      name = theme.name,
+      file = previewFile,
+      score = i,
+    })
+    longest_name = math.max(longest_name, #theme.name)
+  end
+
+  longest_name = longest_name + 2
+
+  local current = M.GetCurrentTheme()
+  local showed = false
+  snacks().picker({
+    items = items,
+    title = "Themes",
+    format = function(item)
+      local ret = {}
+      -- 第一列：名称，左对齐并填充空格
+      ret[#ret + 1] = { string.format("%-" .. longest_name .. "s", item.name), "SnacksPickerMatch" } -- 使用特定高亮组
+      -- 第二列：路径
+      ret[#ret + 1] = { item.text, "Comment" } -- 使用 Comment 高亮组
+      return ret
+    end,
+
+    on_change = function(_, selection)
+      if showed then
+        M.SetTheme(selection.name, false)
+      end
+    end,
+
+    on_show = function(picker)
+      local selected = nil
+      for _, item in ipairs(items) do
+        if item.name == current then
+          selected = item.idx
+        end
+      end
+      if selected ~= nil then
+        picker.list:scroll(selected - 1)
+      end
+      showed = true
+    end,
+
+    on_close = function(_)
+      M.ResetTheme()
+    end,
+
+    actions = {
+      confirm = function(picker, selected)
+        M.SetTheme(selected.name, true)
+        picker:close()
+      end,
+    },
+  })
+end
+
 return M
