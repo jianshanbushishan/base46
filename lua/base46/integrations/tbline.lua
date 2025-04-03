@@ -13,8 +13,8 @@ function M.GetHighlight(themeColors)
     TbBufOnModified = { fg = base30.green, bg = base30.black },
     TbBufOffModified = { fg = base30.red, bg = base30.black2 },
 
-    BufSepOn = { fg = base30.red, bg = base30.black },
-    BufSepOff = { fg = base30.light_grey, bg = base30.black2 },
+    TbBufSepOn = { fg = base30.red, bg = base30.black },
+    TbBufSepOff = { fg = base30.light_grey, bg = base30.black2 },
   }
 end
 
