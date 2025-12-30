@@ -29,7 +29,7 @@ local function ChangeConfig(cfg)
   vim.g.base46Cfg = vim.tbl_deep_extend("force", vim.g.base46Cfg, cfg)
 end
 
-function M.SetBackground(background, force)
+function M.SetBackground(background, force, save)
   if vim.opt.background:get() == background and not force then
     return
   end
@@ -47,6 +47,10 @@ function M.SetBackground(background, force)
   local theme = vim.g.base46Cfg.theme[background]
   M.LoadTheme(theme)
   vim.cmd("doautocmd ColorScheme")
+
+  if save then
+    SaveJson2File(vim.g.base46Cfg.theme, vim.g.base46Cfg.themeCfg)
+  end
 end
 
 function M.LoadTheme(theme)
@@ -136,7 +140,7 @@ function M.SwitchBackground()
     background = "dark"
   end
 
-  M.SetBackground(background, false)
+  M.SetBackground(background, false, true)
 end
 
 local function GenerateCode(hls, terms)
