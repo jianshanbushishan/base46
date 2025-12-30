@@ -29,6 +29,22 @@ local function ChangeConfig(cfg)
   vim.g.base46Cfg = vim.tbl_deep_extend("force", vim.g.base46Cfg, cfg)
 end
 
+local function Save2File(content, filePath)
+  local file = io.open(filePath, "w")
+  if not file then
+    vim.notify(string.format("Cant write file: %s!", filePath), error)
+    return nil
+  end
+
+  file:write(content)
+  file:close()
+end
+
+local function SaveJson2File(obj, filePath)
+  local content = vim.json.encode(obj)
+  Save2File(content, filePath)
+end
+
 function M.SetBackground(background, force, save)
   if vim.opt.background:get() == background and not force then
     return
@@ -62,17 +78,6 @@ function M.LoadTheme(theme)
   loadfile(hlFile)()
 end
 
-local function Save2File(content, filePath)
-  local file = io.open(filePath, "w")
-  if not file then
-    vim.notify(string.format("Cant write file: %s!", filePath), error)
-    return nil
-  end
-
-  file:write(content)
-  file:close()
-end
-
 local function LoadFile2Json(filePath)
   local file = io.open(filePath, "r")
   if file == nil then
@@ -96,11 +101,6 @@ local function LoadThemeConf()
   ChangeConfig({ theme = opts })
 
   return true
-end
-
-local function SaveJson2File(obj, filePath)
-  local content = vim.json.encode(obj)
-  Save2File(content, filePath)
 end
 
 function M.setup(opts)
