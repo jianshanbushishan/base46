@@ -66,18 +66,17 @@ function M.GetHighlight(themeColors)
   -- (base30.black is light in light themes, dark in dark themes)
   local contrast_fg = base30.black
 
-  -- Modern & Beautiful: Subtle tints from accent colors for module backgrounds
+  -- Color Palette (Subtle tints)
   local tint_alpha = isLight and 0.15 or 0.20
   local lsp_bg = blend(base30.blue, statusline_bg, tint_alpha)
-  local git_bg = blend(base30.purple, statusline_bg, tint_alpha)
   local cwd_bg = blend(base30.teal, statusline_bg, tint_alpha)
+  local git_bg = blend(base30.purple, statusline_bg, tint_alpha)
 
-  -- Neutral background to break up accent colors
+  -- Neutral background
   local neutral_bg = base30.one_bg or base30.one_bg2
 
-  -- Premium high-contrast anchors
-  local pos_bg = base30.blue -- Changed to match Normal Mode feel or use teal
-  pos_bg = base30.teal -- Teal looks great for position
+  -- Solid Anchor background (Teal)
+  local pos_bg = base30.teal
 
   -- Mode colors (solid high-contrast anchors)
   local mode_colors = {
@@ -95,41 +94,39 @@ function M.GetHighlight(themeColors)
     StatusLine = { bg = statusline_bg, fg = subtle_fg },
     StatusLineNC = { bg = statusline_bg, fg = subtle_fg },
 
-    -- Sequence Left: Mode -> File -> FileSize -> Git
-    -- St_file uses a neutral background to contrast with the Mode's solid accent
+    -- Sequence Left: Mode (Solid) -> File (Neutral) -> FileSize (Flat) -> Git (Purple Tint)
     St_file = { fg = text_fg, bg = neutral_bg, bold = true },
     St_file_sep = { fg = neutral_bg, bg = statusline_bg },
 
-    -- FileSize is flat on the background for a modern look
     St_filesize = { fg = subtle_fg, bg = statusline_bg },
 
-    -- Git uses a purple tint
     St_git = { fg = text_fg, bg = git_bg },
     St_gitIcons = { fg = base30.purple, bg = git_bg, bold = true },
     St_git_sep = { fg = git_bg, bg = statusline_bg },
 
-    -- Sequence Right: LSP -> CWD -> LineCol -> Position
-    -- LSP uses a blue tint
+    -- Sequence Right (Display Order): LSP -> LineCol -> Cursor -> CWD
+    -- Goal: Maintain visual color sequence A(Blue Tint) -> B(Teal Tint) -> C(Neutral) -> D(Solid Teal Anchor)
+
+    -- 1. LSP: Blue Tint (Stays A)
     St_Lsp = { fg = text_fg, bg = lsp_bg, bold = true },
     St_LspMsg = { fg = subtle_fg, bg = lsp_bg },
     St_Lsp_sep = { fg = lsp_bg, bg = statusline_bg },
 
-    -- CWD uses a teal tint
-    St_cwd_text = { fg = text_fg, bg = cwd_bg },
-    St_cwd_icon = { fg = base30.teal, bg = cwd_bg, bold = true },
-    St_cwd_sep = { fg = cwd_bg, bg = statusline_bg },
+    -- 2. LineCol: Was Neutral, now takes Teal Tint (B) to match visual sequence
+    St_linecol = { fg = text_fg, bg = cwd_bg },
+    St_linecol_sep = { fg = cwd_bg, bg = statusline_bg },
 
-    -- LineCol uses a neutral background to break up the teal tints
-    St_linecol = { fg = text_fg, bg = neutral_bg },
-    St_linecol_sep = { fg = neutral_bg, bg = statusline_bg },
+    -- 3. Cursor/Position: Was Solid Teal, now takes Neutral (C) to match visual sequence
+    St_cursor = { fg = text_fg, bg = neutral_bg, bold = true },
+    St_pos = { fg = text_fg, bg = neutral_bg, bold = true },
+    St_pos_sep = { fg = neutral_bg, bg = statusline_bg },
+    St_pos_icon = { fg = base30.teal, bg = neutral_bg, bold = true },
+    St_pos_text = { fg = text_fg, bg = neutral_bg, bold = true },
 
-    -- Position is a solid high-contrast anchor
-    St_pos = { fg = contrast_fg, bg = pos_bg, bold = true },
-    St_pos_sep = { fg = pos_bg, bg = statusline_bg },
-    St_pos_icon = { fg = contrast_fg, bg = pos_bg, bold = true },
-    St_pos_text = { fg = contrast_fg, bg = pos_bg, bold = true },
-
-    St_cursor = { fg = contrast_fg, bg = pos_bg, bold = true },
+    -- 4. CWD: Was Teal Tint, now takes Solid Teal Anchor (D) since it's at the very end
+    St_cwd_text = { fg = contrast_fg, bg = pos_bg, bold = true },
+    St_cwd_icon = { fg = contrast_fg, bg = pos_bg, bold = true },
+    St_cwd_sep = { fg = pos_bg, bg = statusline_bg },
 
     -- Diagnostics on main background
     St_diagnostics = { bg = statusline_bg },
