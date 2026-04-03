@@ -191,6 +191,50 @@ local function generate_code(highlights, terminal_colors)
   return table.concat(lines, "\n")
 end
 
+--- Deterministic serialization: sorts all table keys so output is identical across runs.
+--- vim.json.encode has non-deterministic key order because Lua hash seed is randomized per process.
+local function stable_serialize(value)
+  local t = type(value)
+  if t == "string" then
+    return string.format("%q", value)
+  elseif t == "number" or t == "boolean" then
+    return tostring(value)
+  elseif t == "table" then
+    -- Check if array-like (all keys are consecutive integers starting from 1)
+    local max_idx = 0
+    for k in pairs(value) do
+      if type(k) == "number" and k == math.floor(k) and k >= 1 then
+        if k > max_idx then
+          max_idx = k
+        end
+      end
+    end
+
+    local is_array = max_idx > 0 and max_idx == #value
+    if is_array then
+      local parts = {}
+      for i = 1, #value do
+        parts[i] = stable_serialize(value[i])
+      end
+      return "[" .. table.concat(parts, ",") .. "]"
+    else
+      local keys = {}
+      for k in pairs(value) do
+        keys[#keys + 1] = k
+      end
+      table.sort(keys, function(a, b)
+        return tostring(a) < tostring(b)
+      end)
+      local parts = {}
+      for _, k in ipairs(keys) do
+        parts[#parts + 1] = string.format("[%s]=%s", stable_serialize(k), stable_serialize(value[k]))
+      end
+      return "{" .. table.concat(parts, ",") .. "}"
+    end
+  end
+  return "nil"
+end
+
 local function get_compile_signature(theme, theme_colors, cfg)
   local signature_payload = {
     theme = theme,
@@ -200,12 +244,27 @@ local function get_compile_signature(theme, theme_colors, cfg)
     polish_hl = theme_colors.polish_hl,
   }
 
-  local ok, encoded = pcall(vim.json.encode, signature_payload)
-  if not ok then
-    return theme
-  end
+  return stable_serialize(signature_payload)
+end
 
-  return encoded
+local function persist_signature(cfg, theme, signature)
+  local sig_path = get_theme_cache_path(cfg, theme) .. ".sig"
+  local file = io.open(sig_path, "w")
+  if file then
+    file:write(signature)
+    file:close()
+  end
+end
+
+local function read_persisted_signature(cfg, theme)
+  local sig_path = get_theme_cache_path(cfg, theme) .. ".sig"
+  local file = io.open(sig_path, "r")
+  if not file then
+    return nil
+  end
+  local content = file:read("*a")
+  file:close()
+  return content
 end
 
 local function compile_theme(theme, cfg, theme_colors, signature, notify_error)
@@ -218,6 +277,7 @@ local function compile_theme(theme, cfg, theme_colors, signature, notify_error)
   end
 
   compiled_signatures[theme] = signature
+  persist_signature(cfg, theme, signature)
   return true
 end
 
@@ -229,6 +289,11 @@ local function ensure_compiled_theme(theme, cfg, notify_error)
 
   local signature = get_compile_signature(theme, theme_colors, cfg)
   local cache_path = get_theme_cache_path(cfg, theme)
+
+  -- On cold start, compiled_signatures is empty; load persisted signature from disk
+  if compiled_signatures[theme] == nil then
+    compiled_signatures[theme] = read_persisted_signature(cfg, theme)
+  end
 
   if vim.fn.filereadable(cache_path) ~= 1 or compiled_signatures[theme] ~= signature then
     return compile_theme(theme, cfg, theme_colors, signature, notify_error)

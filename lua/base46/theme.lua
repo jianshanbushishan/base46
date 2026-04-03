@@ -58,11 +58,16 @@ function M.setup(opts)
   end
 
   if config.get().autoswitch then
-    autoswitch.start(config.get().themeCfg, function()
-      if config.load_theme_conf(notify_error) then
-        M.SetBackground(config.get().theme.background, true)
-      end
-    end, notify_error)
+    vim.api.nvim_create_autocmd("VimEnter", {
+      callback = function()
+        autoswitch.start(config.get().themeCfg, function()
+          if config.load_theme_conf(notify_error) then
+            M.SetBackground(config.get().theme.background, true)
+          end
+        end, notify_error)
+      end,
+      once = true,
+    })
   end
 
   M.SetBackground(config.get().theme.background, true)
